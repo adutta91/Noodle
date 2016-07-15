@@ -33750,7 +33750,7 @@
 	
 	  logout: function (event) {
 	    event.preventDefault();
-	    SessionUtil.logout({ id: SessionStore.user().id });
+	    SessionUtil.logoutUser({ id: SessionStore.user().id });
 	  },
 	
 	  render: function () {
