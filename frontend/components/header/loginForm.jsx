@@ -38,13 +38,13 @@ var LoginForm = React.createClass({
       <div className="form flexColumn">
         <div className="flexColumn">
           <h3>Hello!</h3>
-          <h5>Please log in or sign up below!</h5>
+          <h5>Please log in below!</h5>
         </div>
         <div className="inputBoxes flexColumn">
           <input type="text" onChange={this.usernameChange} placeholder="username" value={this.state.username}/>
           <input type="password" onChange={this.passwordChange} placeholder="password" value={this.state.password}/>
         </div>
-        <div className="button" onClick={this._onSubmit}>Submit</div>
+        <div className="button" onClick={this._onSubmit}>Log in</div>
       </div>
     )
   }

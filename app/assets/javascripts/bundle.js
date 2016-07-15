@@ -33590,6 +33590,7 @@
 	// COMPONENTS
 	var LoginButton = __webpack_require__(261);
 	var LogoutButton = __webpack_require__(263);
+	var SignUpButton = __webpack_require__(274);
 	var ProfileButton = __webpack_require__(262);
 	
 	var Header = React.createClass({
@@ -33626,6 +33627,7 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'flexRow headerButtons' },
+	        React.createElement(SignUpButton, null),
 	        React.createElement(LoginButton, null)
 	      );
 	    }
@@ -34487,7 +34489,7 @@
 	        React.createElement(
 	          'h5',
 	          null,
-	          'Please log in or sign up below!'
+	          'Please log in below!'
 	        )
 	      ),
 	      React.createElement(
@@ -34499,13 +34501,183 @@
 	      React.createElement(
 	        'div',
 	        { className: 'button', onClick: this._onSubmit },
-	        'Submit'
+	        'Log in'
 	      )
 	    );
 	  }
 	});
 	
 	module.exports = LoginForm;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// COMPONENTS
+	var Modal = __webpack_require__(264);
+	var SignUpForm = __webpack_require__(275);
+	
+	// MODAL STYLES
+	var modalStyle = {
+	  transform: 'inherit',
+	  width: '300px',
+	  transform: 'translate(-50%, -50%)',
+	  border: '1px solid black',
+	  borderRadius: '3px'
+	};
+	
+	var backdropStyle = {
+	  backgroundColor: 'rgba(0, 0, 0, 0.2)'
+	};
+	
+	var contentStyle = {
+	  height: '100%',
+	  padding: '20px'
+	};
+	
+	var SignUpButton = React.createClass({
+	  displayName: 'SignUpButton',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      open: false
+	    };
+	  },
+	
+	  showModal: function () {
+	    this.refs.modal.show();
+	    this.setState({ open: true });
+	  },
+	
+	  hideModal: function () {
+	    this.refs.modal.hide();
+	    this.setState({ open: false });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.showModal },
+	        'Sign Up'
+	      ),
+	      React.createElement(
+	        Modal,
+	        { ref: 'modal',
+	          contentStyle: contentStyle,
+	          modalStyle: modalStyle,
+	          backdropStyle: backdropStyle },
+	        React.createElement(SignUpForm, { modalCallback: this.hideModal })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = SignUpButton;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// FLUX
+	var UserUtil = __webpack_require__(276);
+	
+	var SignUpForm = React.createClass({
+	  displayName: 'SignUpForm',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      username: '',
+	      password: ''
+	    };
+	  },
+	
+	  usernameChange: function (event) {
+	    event.preventDefault();
+	    this.setState({ username: event.currentTarget.value });
+	  },
+	
+	  passwordChange: function (event) {
+	    event.preventDefault();
+	    this.setState({ password: event.currentTarget.value });
+	  },
+	
+	  _onSubmit: function (event) {
+	    event.preventDefault();
+	    UserUtil.createUser({
+	      user: {
+	        username: this.state.username,
+	        password: this.state.password
+	      }
+	    });
+	    this.props.modalCallback();
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'form flexColumn' },
+	      React.createElement(
+	        'div',
+	        { className: 'flexColumn' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          'Hello!'
+	        ),
+	        React.createElement(
+	          'h5',
+	          null,
+	          'Please sign up below!'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'inputBoxes flexColumn' },
+	        React.createElement('input', { type: 'text', onChange: this.usernameChange, placeholder: 'username', value: this.state.username }),
+	        React.createElement('input', { type: 'password', onChange: this.passwordChange, placeholder: 'password', value: this.state.password })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this._onSubmit },
+	        'Sign Up'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = SignUpForm;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	var SessionActions = __webpack_require__(236);
+	
+	module.exports = {
+	  createUser: function (user) {
+	    $.ajax({
+	      url: 'api/users',
+	      method: 'POST',
+	      data: user,
+	      success: function (user) {
+	        SessionActions.loginUser(user);
+	      },
+	      error: function (error) {
+	        alert(error.responseText);
+	      }
+	    });
+	  }
+	};
 
 /***/ }
 /******/ ]);
