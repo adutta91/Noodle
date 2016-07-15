@@ -33616,7 +33616,7 @@
 	      React.createElement(
 	        'h2',
 	        { className: 'title' },
-	        'NoodleOn'
+	        'Noodle'
 	      ),
 	      this.getButton()
 	    );

@@ -49,7 +49,7 @@ var Header = React.createClass({
   render: function() {
     return (
       <div className="header flexRow">
-        <h2 className="title">NoodleOn</h2>
+        <h2 className="title">Noodle</h2>
         {this.getButton()}
       </div>
     )
