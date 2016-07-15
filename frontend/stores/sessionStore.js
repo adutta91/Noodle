@@ -10,6 +10,10 @@ SessionStore.loggedIn = function() {
   return _loggedIn;
 };
 
+SessionStore.user = function() {
+  return _loggedInUser;
+};
+
 SessionStore.__onDispatch = function(payload) {
   switch(payload.actionType) {
     case 'LOGIN_USER':
