@@ -40,4 +40,14 @@ var logout = function() {
   _loggedIn = false;
 }
 
+var checkForLogin = function() {
+  var user = localStorage['foodieUser'];
+  if(user) {
+    _loggedInUser = JSON.parse(user);
+    _loggedIn = true;
+  }
+};
+
+checkForLogin();
+
 module.exports = SessionStore;

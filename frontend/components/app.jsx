@@ -27,7 +27,15 @@ var App = React.createClass({
   },
 
   sessionUpdate: function() {
-    HashHistory.push('/');
+    this.setState({ loggedIn: SessionStore.loggedIn() });
+  },
+
+  welcome: function() {
+    if (this.state.loggedIn) {
+      return "Welcome, " + SessionStore.user().username + "!";
+    } else {
+      return ""
+    }
   },
 
   render: function() {
@@ -35,7 +43,7 @@ var App = React.createClass({
       <div className="flexColumn">
         <Header loggedIn={this.state.loggedIn}/>
         <div className="app">
-
+          {this.welcome()}
         </div>
         <Footer />
       </div>

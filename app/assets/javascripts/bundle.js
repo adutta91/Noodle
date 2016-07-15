@@ -21121,7 +21121,15 @@
 	  },
 	
 	  sessionUpdate: function () {
-	    HashHistory.push('/');
+	    this.setState({ loggedIn: SessionStore.loggedIn() });
+	  },
+	
+	  welcome: function () {
+	    if (this.state.loggedIn) {
+	      return "Welcome, " + SessionStore.user().username + "!";
+	    } else {
+	      return "";
+	    }
 	  },
 	
 	  render: function () {
@@ -21129,7 +21137,11 @@
 	      'div',
 	      { className: 'flexColumn' },
 	      React.createElement(Header, { loggedIn: this.state.loggedIn }),
-	      React.createElement('div', { className: 'app' }),
+	      React.createElement(
+	        'div',
+	        { className: 'app' },
+	        this.welcome()
+	      ),
 	      React.createElement(Footer, null)
 	    );
 	  }
@@ -27109,6 +27121,16 @@
 	  _loggedInUser = null;
 	  _loggedIn = false;
 	};
+	
+	var checkForLogin = function () {
+	  var user = localStorage['foodieUser'];
+	  if (user) {
+	    _loggedInUser = JSON.parse(user);
+	    _loggedIn = true;
+	  }
+	};
+	
+	checkForLogin();
 	
 	module.exports = SessionStore;
 
