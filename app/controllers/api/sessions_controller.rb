@@ -11,6 +11,7 @@ class Api::SessionsController < ApplicationController
     else
       render json: {message: "Invalid credentials"}, status: 422
     end
+
   end
 
   def destroy
@@ -21,5 +22,6 @@ class Api::SessionsController < ApplicationController
       render :show
     else
       render json: { message: "User not found"}, status: 422
+    end
   end
 end
