@@ -23,6 +23,19 @@ body {
   margin: 0;
 }
 
+input {
+  padding: 6px 2px;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+h3, h5 {
+  margin: 0;
+}
+
 .app {
   margin-top: 50px;
   height: 90vh;
@@ -66,10 +79,16 @@ body {
   transition: .5s;
   margin: 0 10px;
   border-radius: 5px;
+  text-align: center;
 }
 
 .button:hover {
   cursor: pointer;
   transition: .5s;
   background-color: #d61313;
+}
+
+.form {
+  height: 300px;
+  justify-content: space-around;
 }
