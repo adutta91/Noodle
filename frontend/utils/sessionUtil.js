@@ -10,12 +10,22 @@ module.exports = {
         SessionActions.loginUser(user);
       },
       error: function(error) {
-        alert('session error')
+        alert('session start error')
       }
     })
   },
 
-  logoutUser: function() {
-    
+  logoutUser: function(id) {
+    $.ajax({
+      url: 'api/session',
+      method: 'DELETE',
+      data: id,
+      success: function(response) {
+        SessionActions.logoutUser();
+      },
+      error: function(error) {
+        alert('session end error');
+      }
+    });
   }
 }

@@ -6,6 +6,7 @@ var SessionUtil = require('../../utils/sessionUtil');
 
 // COMPONENTS
 var LoginButton = require('./loginButton');
+var LogoutButton = require('./logoutButton');
 var ProfileButton = require('./profileButton');
 
 var Header = React.createClass({
@@ -31,11 +32,16 @@ var Header = React.createClass({
   getButton: function() {
     if (this.state.loggedIn) {
       return (
-        <ProfileButton />
+        <div className="flexRow headerButtons">
+          <ProfileButton />
+          <LogoutButton />
+        </div>
       );
     } else {
       return (
-        <LoginButton />
+        <div className="flexRow headerButtons">
+          <LoginButton />
+        </div>
       )
     }
   },

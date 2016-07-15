@@ -54,6 +54,12 @@ body {
   justify-content: center;
 }
 
+.headerButtons {
+  position: absolute;
+  top: 8px;
+  right: 5px;
+}
+
 .button {
   border: 1px solid black;
   padding: 5px 20px;

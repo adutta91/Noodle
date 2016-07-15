@@ -16,7 +16,6 @@ class Api::SessionsController < ApplicationController
 
   def destroy
     @user = User.find_by_id(params[:id])
-
     if @user
       log_out(@user)
       render :show

@@ -6,5 +6,11 @@ module.exports = {
       actionType: 'LOGIN_USER',
       user: user
     });
+  },
+
+  logoutUser: function() {
+    Dispatcher.dispatch({
+      actionType: 'LOGOUT_USER'
+    })
   }
 }

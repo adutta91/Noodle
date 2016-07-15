@@ -26707,12 +26707,24 @@
 	        SessionActions.loginUser(user);
 	      },
 	      error: function (error) {
-	        alert('session error');
+	        alert('session start error');
 	      }
 	    });
 	  },
 	
-	  logoutUser: function () {}
+	  logoutUser: function (id) {
+	    $.ajax({
+	      url: 'api/session',
+	      method: 'DELETE',
+	      data: id,
+	      success: function (response) {
+	        SessionActions.logoutUser();
+	      },
+	      error: function (error) {
+	        alert('session end error');
+	      }
+	    });
+	  }
 	};
 
 /***/ },
@@ -26726,6 +26738,12 @@
 	    Dispatcher.dispatch({
 	      actionType: 'LOGIN_USER',
 	      user: user
+	    });
+	  },
+	
+	  logoutUser: function () {
+	    Dispatcher.dispatch({
+	      actionType: 'LOGOUT_USER'
 	    });
 	  }
 	};
@@ -33549,6 +33567,7 @@
 	
 	// COMPONENTS
 	var LoginButton = __webpack_require__(261);
+	var LogoutButton = __webpack_require__(263);
 	var ProfileButton = __webpack_require__(262);
 	
 	var Header = React.createClass({
@@ -33575,9 +33594,18 @@
 	
 	  getButton: function () {
 	    if (this.state.loggedIn) {
-	      return React.createElement(ProfileButton, null);
+	      return React.createElement(
+	        'div',
+	        { className: 'flexRow headerButtons' },
+	        React.createElement(ProfileButton, null),
+	        React.createElement(LogoutButton, null)
+	      );
 	    } else {
-	      return React.createElement(LoginButton, null);
+	      return React.createElement(
+	        'div',
+	        { className: 'flexRow headerButtons' },
+	        React.createElement(LoginButton, null)
+	      );
 	    }
 	  },
 	
@@ -33705,6 +33733,36 @@
 	});
 	
 	module.exports = ProfileButton;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// FLUX
+	var SessionUtil = __webpack_require__(235);
+	var SessionStore = __webpack_require__(241);
+	
+	var LogoutButton = React.createClass({
+	  displayName: 'LogoutButton',
+	
+	
+	  logout: function (event) {
+	    event.preventDefault();
+	    SessionUtil.logout({ id: SessionStore.user().id });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'button', onClick: this.logout },
+	      'Logout'
+	    );
+	  }
+	});
+	
+	module.exports = LogoutButton;
 
 /***/ }
 /******/ ]);
