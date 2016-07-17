@@ -15,7 +15,8 @@ var App = React.createClass({
 
   getInitialState: function() {
     return ({
-      loggedIn: SessionStore.loggedIn()
+      loggedIn: SessionStore.loggedIn(),
+      user: SessionStore.user()
     });
   },
 
@@ -28,14 +29,25 @@ var App = React.createClass({
   },
 
   sessionUpdate: function() {
-    this.setState({ loggedIn: SessionStore.loggedIn() });
+    this.setState({
+      loggedIn: SessionStore.loggedIn(),
+      user: SessionStore.user()
+    });
   },
 
   welcome: function() {
     if (this.state.loggedIn) {
-      return "Welcome, " + SessionStore.user().username + "!";
+      return "Welcome, " + this.state.user.username + "!";
     } else {
       return ""
+    }
+  },
+
+  getUserId: function() {
+    if (this.state.loggedIn) {
+      return this.state.user.id
+    } else {
+      return -1
     }
   },
 
@@ -45,7 +57,7 @@ var App = React.createClass({
         <Header loggedIn={this.state.loggedIn}/>
         <div className="app">
           {this.welcome()}
-          <RecipeIndex />
+          <RecipeIndex userId={this.getUserId()}/>
         </div>
         <Footer />
       </div>
