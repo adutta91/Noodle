@@ -98,6 +98,7 @@ h5 {
   cursor: pointer;
   transition: .5s;
   background-color: #d61313;
+  color: white;
 }
 
 .form {

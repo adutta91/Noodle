@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   attr_reader :password
 
   # associations
+  has_many :recipes
 
   # password methods
   def password=(password)
