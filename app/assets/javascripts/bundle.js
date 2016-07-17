@@ -34745,7 +34745,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'recipeList' },
+	      { className: 'recipeList flexRow' },
 	      this.displayRecipes()
 	    );
 	  }

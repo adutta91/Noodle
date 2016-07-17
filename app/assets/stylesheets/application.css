@@ -52,6 +52,7 @@ h5 {
 .app {
   margin-top: 100px;
   height: 90vh;
+  text-align: center;
 }
 
 .header {
@@ -59,6 +60,7 @@ h5 {
   height: 50px;
   position: fixed;
   top: 10px;
+  justify-content: center;
 }
 
 .footer {
@@ -76,7 +78,6 @@ h5 {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
 }
 
 .headerButtons {

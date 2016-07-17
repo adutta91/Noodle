@@ -1,3 +1,30 @@
 // Place all the styles related to the Recipes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.recipeList {
+  flex-wrap: wrap;
+  width: 80vw;
+  justify-content: space-around;
+  margin-top: 30px;
+}
+
+.recipe {
+  border: 1px solid black;
+  padding: 10px;
+  width: 150px;
+  height: 200px;
+  border-radius: 3px;
+  -moz-box-shadow: 1px 1px 1px 1px rgba(0,0,0,.5);
+  -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,.5);
+  box-shadow: 1px 1px 1px 1px rgba(0,0,0,.5);
+  transition: .5s;
+}
+
+.recipe:hover {
+  cursor: pointer;
+  -moz-box-shadow: 2px 2px 2px 2px rgba(0,0,0,.5);
+  -webkit-box-shadow: 2px 2px 2px 2px rgba(0,0,0,.5);
+  box-shadow: 2px 2px 2px 2px rgba(0,0,0,.5);
+  transition: .5s;
+}

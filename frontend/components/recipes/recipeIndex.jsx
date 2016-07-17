@@ -43,7 +43,7 @@ var RecipeIndex = React.createClass({
 
   render: function() {
     return (
-      <div className="recipeList">
+      <div className="recipeList flexRow">
         {this.displayRecipes()}
       </div>
     )
