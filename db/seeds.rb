@@ -13,18 +13,18 @@ user.save!
 
 recipe = Recipe.new
 recipe.title = 'fondue'
-recipe.url = 'www.google.com'
+recipe.url = 'http://www.google.com'
 recipe.user_id = 1
 recipe.save!
 
 recipe = Recipe.new
 recipe.title = 'salad'
-recipe.url = 'www.yahoo.com'
+recipe.url = 'http://www.yahoo.com'
 recipe.user_id = 1
 recipe.save!
 
 recipe = Recipe.new
 recipe.title = 'soup'
-recipe.url = 'www.facebook.com'
+recipe.url = 'http://www.facebook.com'
 recipe.user_id = 1
 recipe.save!

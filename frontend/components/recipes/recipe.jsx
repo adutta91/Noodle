@@ -2,16 +2,24 @@ var React = require('react');
 
 var Recipe = React.createClass({
 
-  getInitialState: function() {
-    return ({
-      recipe: this.props.recipe
-    });
+  _onClick: function() {
+    window.open(
+      this.props.recipe.url,
+      '_blank'
+    )
+  },
+
+  displayRecipe: function() {
+    var recipe = this.props.recipe;
+    return (
+      <div>{recipe.title}</div>
+    );
   },
 
   render: function() {
     return (
-      <div>
-        This is a recipe
+      <div className="recipe" onClick={this._onClick}>
+        {this.displayRecipe()}
       </div>
     )
   }

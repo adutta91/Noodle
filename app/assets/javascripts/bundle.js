@@ -34763,17 +34763,24 @@
 	  displayName: 'Recipe',
 	
 	
-	  getInitialState: function () {
-	    return {
-	      recipe: this.props.recipe
-	    };
+	  _onClick: function () {
+	    window.open(this.props.recipe.url, '_blank');
+	  },
+	
+	  displayRecipe: function () {
+	    var recipe = this.props.recipe;
+	    return React.createElement(
+	      'div',
+	      null,
+	      recipe.title
+	    );
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
-	      'This is a recipe'
+	      { className: 'recipe', onClick: this._onClick },
+	      this.displayRecipe()
 	    );
 	  }
 	});
