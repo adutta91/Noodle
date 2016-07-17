@@ -9,11 +9,12 @@ var SessionStore = require('../stores/sessionStore');
 // COMPONENTS
 var Header = require('./header/header');
 var Footer = require('./footer/footer');
+var Recipe = require('./recipes/recipe');
 
 var App = React.createClass({
 
   getInitialState: function() {
-    return ({
+    return ({ 
       loggedIn: SessionStore.loggedIn()
     });
   },
@@ -38,12 +39,29 @@ var App = React.createClass({
     }
   },
 
+  displayRecipes: function() {
+    if (this.state.recipes.length > 0) {
+      return this.state.recipes.map(function(recipe) {
+        return (
+          <Recipe recipe={recipe} />
+        )
+      });
+    } else {
+      return (
+        <div>You don't have any recipes! Make one below</div>
+      )
+    }
+  },
+
   render: function() {
     return (
       <div className="flexColumn">
         <Header loggedIn={this.state.loggedIn}/>
         <div className="app">
           {this.welcome()}
+          <div>
+            {this.displayRecipes()}
+          </div>
         </div>
         <Footer />
       </div>

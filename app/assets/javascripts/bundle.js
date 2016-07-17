@@ -21101,6 +21101,7 @@
 	// COMPONENTS
 	var Header = __webpack_require__(259);
 	var Footer = __webpack_require__(260);
+	var Recipe = __webpack_require__(277);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -21132,6 +21133,20 @@
 	    }
 	  },
 	
+	  displayRecipes: function () {
+	    if (this.state.recipes.length > 0) {
+	      return this.state.recipes.map(function (recipe) {
+	        return React.createElement(Recipe, { recipe: recipe });
+	      });
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        'You don\'t have any recipes! Make one below'
+	      );
+	    }
+	  },
+	
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -21140,7 +21155,12 @@
 	      React.createElement(
 	        'div',
 	        { className: 'app' },
-	        this.welcome()
+	        this.welcome(),
+	        React.createElement(
+	          'div',
+	          null,
+	          this.displayRecipes()
+	        )
 	      ),
 	      React.createElement(Footer, null)
 	    );
@@ -34678,6 +34698,26 @@
 	    });
 	  }
 	};
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Recipe = React.createClass({
+	  displayName: 'Recipe',
+	
+	  render: function () {
+	    React.createElement(
+	      'div',
+	      null,
+	      'This is a recipe'
+	    );
+	  }
+	});
+	
+	module.exports = Recipe;
 
 /***/ }
 /******/ ]);
