@@ -98,7 +98,7 @@ h5 {
 .button:hover {
   cursor: pointer;
   transition: .5s;
-  background-color: #d61313;
+  background-color: rgba(152, 1, 1, .75);
   color: white;
 }
 
