@@ -27,6 +27,8 @@ class Api::UsersController < ApplicationController
   end
 
   def recipes
+    @user = find_user
+    render :show_recipes
   end
 
   private
