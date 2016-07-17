@@ -33610,7 +33610,11 @@
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// FLUX
 	var SessionActions = __webpack_require__(259);
+	var RecipeActions = __webpack_require__(280);
+	
+	var RecipeUtil = __webpack_require__(279);
 	
 	module.exports = {
 	  loginUser: function (user) {
@@ -33620,6 +33624,7 @@
 	      data: user,
 	      success: function (user) {
 	        SessionActions.loginUser(user);
+	        RecipeUtil.fetchUserRecipes(user.id);
 	      },
 	      error: function (error) {
 	        alert('session start error');
@@ -33634,6 +33639,7 @@
 	      data: id,
 	      success: function (response) {
 	        SessionActions.logoutUser();
+	        RecipeActions.receiveRecipes([]);
 	      },
 	      error: function (error) {
 	        alert('session end error');
@@ -34700,11 +34706,11 @@
 	var React = __webpack_require__(1);
 	
 	// FLUX
-	var RecipeStore = __webpack_require__(279);
-	var RecipeUtil = __webpack_require__(280);
+	var RecipeStore = __webpack_require__(278);
+	var RecipeUtil = __webpack_require__(279);
 	
 	// COMPONENTS
-	var Recipe = __webpack_require__(278);
+	var Recipe = __webpack_require__(281);
 	
 	var RecipeIndex = React.createClass({
 	  displayName: 'RecipeIndex',
@@ -34757,6 +34763,75 @@
 /* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var Store = __webpack_require__(236).Store;
+	var Dispatcher = __webpack_require__(254);
+	
+	var RecipeStore = new Store(Dispatcher);
+	
+	var _recipes = [];
+	
+	RecipeStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case "RECEIVE_RECIPES":
+	      resetRecipes(payload.recipes);
+	      RecipeStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	RecipeStore.recipes = function () {
+	  return _recipes;
+	};
+	
+	var resetRecipes = function (recipes) {
+	  _recipes = recipes;
+	};
+	
+	module.exports = RecipeStore;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	var RecipeActions = __webpack_require__(280);
+	
+	module.exports = {
+	  fetchUserRecipes: function (id) {
+	    if (id > 0) {
+	      $.ajax({
+	        url: 'api/users/' + id + '/recipes',
+	        method: 'GET',
+	        success: function (recipes) {
+	          RecipeActions.receiveRecipes(recipes);
+	        },
+	        error: function (error) {
+	          alert(error.responseText);
+	        }
+	      });
+	    }
+	  }
+	};
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(254);
+	
+	module.exports = {
+	  receiveRecipes: function (recipes) {
+	    Dispatcher.dispatch({
+	      actionType: 'RECEIVE_RECIPES',
+	      recipes: recipes
+	    });
+	  }
+	};
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	
 	var Recipe = React.createClass({
@@ -34786,75 +34861,6 @@
 	});
 	
 	module.exports = Recipe;
-
-/***/ },
-/* 279 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(236).Store;
-	var Dispatcher = __webpack_require__(254);
-	
-	var RecipeStore = new Store(Dispatcher);
-	
-	var _recipes = [];
-	
-	RecipeStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case "RECEIVE_RECIPES":
-	      resetRecipes(payload.recipes);
-	      RecipeStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	RecipeStore.recipes = function () {
-	  return _recipes;
-	};
-	
-	var resetRecipes = function (recipes) {
-	  _recipes = recipes;
-	};
-	
-	module.exports = RecipeStore;
-
-/***/ },
-/* 280 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	var RecipeActions = __webpack_require__(281);
-	
-	module.exports = {
-	  fetchUserRecipes: function (id) {
-	    if (id > 0) {
-	      $.ajax({
-	        url: 'api/users/' + id + '/recipes',
-	        method: 'GET',
-	        success: function (recipes) {
-	          RecipeActions.receiveRecipes(recipes);
-	        },
-	        error: function (error) {
-	          alert(error.responseText);
-	        }
-	      });
-	    }
-	  }
-	};
-
-/***/ },
-/* 281 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(254);
-	
-	module.exports = {
-	  receiveRecipes: function (recipes) {
-	    Dispatcher.dispatch({
-	      actionType: 'RECEIVE_RECIPES',
-	      recipes: recipes
-	    });
-	  }
-	};
 
 /***/ }
 /******/ ]);
