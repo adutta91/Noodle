@@ -35186,10 +35186,14 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'button', onClick: this.openLink },
-	          'Go!'
-	        ),
-	        React.createElement(DeleteRecipeButton, { onClick: this.props.modalCallback, recipeId: recipe.id })
+	          { className: 'links flexRow' },
+	          React.createElement(
+	            'div',
+	            { className: 'openLink icon', onClick: this.openLink },
+	            'Go!'
+	          ),
+	          React.createElement(DeleteRecipeButton, { onClick: this.props.modalCallback, recipeId: recipe.id })
+	        )
 	      );
 	    } else {
 	      return React.createElement('div', null);
@@ -35213,6 +35217,9 @@
 
 	var React = __webpack_require__(1);
 	
+	// OBJECTS
+	var Urls = __webpack_require__(287);
+	
 	// FLUX
 	var RecipeUtil = __webpack_require__(279);
 	var SessionStore = __webpack_require__(235);
@@ -35229,12 +35236,8 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'deleteRecipe' },
-	      React.createElement(
-	        'div',
-	        { className: 'button', onClick: this.deleteRecipe },
-	        'X'
-	      )
+	      null,
+	      React.createElement('img', { src: Urls.trashIcon, className: 'deleteRecipe icon', onClick: this.deleteRecipe })
 	    );
 	  }
 	});
@@ -35246,7 +35249,8 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-	  noodleIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png"
+	  noodleIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png",
+	  trashIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468875634/Noodle/trash.png"
 	};
 
 /***/ }

@@ -1,5 +1,8 @@
 var React = require('react');
 
+// OBJECTS
+var Urls = require('../../assets/urls');
+
 // FLUX
 var RecipeUtil = require('../../utils/recipeUtil');
 var SessionStore = require('../../stores/sessionStore');
@@ -13,8 +16,8 @@ var DeleteRecipeButton = React.createClass({
 
   render: function() {
     return (
-      <div className="deleteRecipe">
-        <div className="button" onClick={this.deleteRecipe}>X</div>
+      <div>
+        <img src={Urls.trashIcon} className="deleteRecipe icon" onClick={this.deleteRecipe}/>
       </div>
     )
   }
