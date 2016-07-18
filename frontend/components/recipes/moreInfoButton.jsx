@@ -4,6 +4,9 @@ var React = require('react');
 var RecipeInfo = require('./recipeInfo');
 var Modal = require('boron/OutlineModal');
 
+// OBJECTS
+var Urls = require('../../assets/urls');
+
 // MODAL STYLES
 var modalStyle = {
   transform : 'inherit',
@@ -45,7 +48,7 @@ var MoreInfoButton = React.createClass({
   render: function() {
     return (
       <div className="moreInfo">
-        <div className="button" onClick={this.showModal}>...</div>
+        <img className="icon" src={Urls.noodleIcon} onClick={this.showModal} />
         <Modal ref="modal"
               contentStyle={contentStyle}
               modalStyle={modalStyle}

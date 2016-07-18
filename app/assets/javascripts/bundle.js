@@ -33544,6 +33544,9 @@
 	var SessionStore = __webpack_require__(235);
 	var SessionUtil = __webpack_require__(258);
 	
+	// OBJECTS
+	var Urls = __webpack_require__(287);
+	
 	// COMPONENTS
 	var LoginButton = __webpack_require__(260);
 	var LogoutButton = __webpack_require__(271);
@@ -33599,7 +33602,7 @@
 	        { className: 'title' },
 	        'Noodle'
 	      ),
-	      React.createElement('img', { className: 'logo', src: 'http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png' }),
+	      React.createElement('img', { className: 'logo', src: Urls.noodleIcon }),
 	      this.getButton()
 	    );
 	  }
@@ -35069,6 +35072,9 @@
 	var RecipeInfo = __webpack_require__(285);
 	var Modal = __webpack_require__(261);
 	
+	// OBJECTS
+	var Urls = __webpack_require__(287);
+	
 	// MODAL STYLES
 	var modalStyle = {
 	  transform: 'inherit',
@@ -35113,11 +35119,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'moreInfo' },
-	      React.createElement(
-	        'div',
-	        { className: 'button', onClick: this.showModal },
-	        '...'
-	      ),
+	      React.createElement('img', { className: 'icon', src: Urls.noodleIcon, onClick: this.showModal }),
 	      React.createElement(
 	        Modal,
 	        { ref: 'modal',
@@ -35233,6 +35235,14 @@
 	});
 	
 	module.exports = DeleteRecipeButton;
+
+/***/ },
+/* 287 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  noodleIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png"
+	};
 
 /***/ }
 /******/ ]);

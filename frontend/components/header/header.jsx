@@ -4,6 +4,9 @@ var React = require('react');
 var SessionStore = require('../../stores/sessionStore');
 var SessionUtil = require('../../utils/sessionUtil');
 
+// OBJECTS
+var Urls = require('../../assets/urls');
+
 // COMPONENTS
 var LoginButton = require('./loginButton');
 var LogoutButton = require('./logoutButton');
@@ -54,7 +57,7 @@ var Header = React.createClass({
         <h2 className="title">
           Noodle
         </h2>
-        <img className="logo" src="http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png"/>
+        <img className="logo" src={Urls.noodleIcon}/>
         {this.getButton()}
       </div>
     )
