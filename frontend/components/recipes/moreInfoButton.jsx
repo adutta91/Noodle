@@ -32,6 +32,7 @@ var MoreInfoButton = React.createClass({
 
   showModal: function(event) {
     event.preventDefault();
+    event.stopPropagation()
     this.refs.modal.show();
     this.setState({ open: true });
   },

@@ -33599,6 +33599,7 @@
 	        { className: 'title' },
 	        'Noodle'
 	      ),
+	      React.createElement('img', { className: 'logo', src: 'http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png' }),
 	      this.getButton()
 	    );
 	  }
@@ -35098,6 +35099,7 @@
 	
 	  showModal: function (event) {
 	    event.preventDefault();
+	    event.stopPropagation();
 	    this.refs.modal.show();
 	    this.setState({ open: true });
 	  },

@@ -51,7 +51,10 @@ var Header = React.createClass({
   render: function() {
     return (
       <div className="header flexRow">
-        <h2 className="title">Noodle</h2>
+        <h2 className="title">
+          Noodle
+        </h2>
+        <img className="logo" src="http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png"/>
         {this.getButton()}
       </div>
     )
