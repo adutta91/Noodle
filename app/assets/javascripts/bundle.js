@@ -35180,6 +35180,11 @@
 	        { className: 'recipeInfo flexColumn' },
 	        recipe.title,
 	        React.createElement(
+	          'p',
+	          null,
+	          recipe.description
+	        ),
+	        React.createElement(
 	          'div',
 	          { className: 'button', onClick: this.openLink },
 	          'Go!'

@@ -19,7 +19,7 @@ class Api::RecipesController < ApplicationController
   private
 
   def recipe_params
-    params.require(:recipe).permit(:title, :url, :user_id)
+    params.require(:recipe).permit(:title, :url, :description, :user_id)
   end
 
   def find_recipe

@@ -15,16 +15,19 @@ recipe = Recipe.new
 recipe.title = 'fondue'
 recipe.url = 'http://www.google.com'
 recipe.user_id = 1
+recipe.description = 'simple fondue that tastes awesome'
 recipe.save!
 
 recipe = Recipe.new
 recipe.title = 'salad'
 recipe.url = 'http://www.yahoo.com'
 recipe.user_id = 1
+recipe.description = "easy salad that's really healthy"
 recipe.save!
 
 recipe = Recipe.new
 recipe.title = 'soup'
 recipe.url = 'http://www.facebook.com'
 recipe.user_id = 1
+recipe.description = "grandma's soup - with beets and butternut squash"
 recipe.save!

@@ -39,6 +39,7 @@ var RecipeInfo = React.createClass({
       return (
         <div className="recipeInfo flexColumn">
           {recipe.title}
+          <p>{recipe.description}</p>
           <div className="button" onClick={this.openLink}>Go!</div>
           <DeleteRecipeButton onClick={this.props.modalCallback} recipeId={recipe.id} />
         </div>
