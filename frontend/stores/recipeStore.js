@@ -18,6 +18,17 @@ RecipeStore.recipes = function() {
   return _recipes;
 };
 
+RecipeStore.findById = function(id) {
+  var target = null;
+  _recipes.forEach(function(recipe) {
+    if (recipe.id === id) {
+      target = recipe;
+      return;
+    }
+  });
+  return target;
+};
+
 var resetRecipes = function(recipes) {
   _recipes = recipes;
 };

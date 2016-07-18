@@ -1,25 +1,24 @@
 var React = require('react');
 
-var Recipe = React.createClass({
+// COMPONENTS
+var MoreInfoButton = require('./moreInfoButton');
 
-  _onClick: function() {
-    window.open(
-      this.props.recipe.url,
-      '_blank'
-    )
-  },
+var Recipe = React.createClass({
 
   displayRecipe: function() {
     var recipe = this.props.recipe;
     return (
-      <div>{recipe.title}</div>
+      <div>
+        {recipe.title}
+      </div>
     );
   },
 
   render: function() {
     return (
-      <div className="recipe" onClick={this._onClick}>
+      <div className="recipe flexColumn">
         {this.displayRecipe()}
+        <MoreInfoButton recipeId={this.props.recipe.id}/>
       </div>
     )
   }

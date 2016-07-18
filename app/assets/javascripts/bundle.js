@@ -34789,6 +34789,17 @@
 	  return _recipes;
 	};
 	
+	RecipeStore.findById = function (id) {
+	  var target = null;
+	  _recipes.forEach(function (recipe) {
+	    if (recipe.id === id) {
+	      target = recipe;
+	      return;
+	    }
+	  });
+	  return target;
+	};
+	
 	var resetRecipes = function (recipes) {
 	  _recipes = recipes;
 	};
@@ -34856,13 +34867,12 @@
 
 	var React = __webpack_require__(1);
 	
+	// COMPONENTS
+	var MoreInfoButton = __webpack_require__(284);
+	
 	var Recipe = React.createClass({
 	  displayName: 'Recipe',
 	
-	
-	  _onClick: function () {
-	    window.open(this.props.recipe.url, '_blank');
-	  },
 	
 	  displayRecipe: function () {
 	    var recipe = this.props.recipe;
@@ -34876,8 +34886,9 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'recipe', onClick: this._onClick },
-	      this.displayRecipe()
+	      { className: 'recipe flexColumn' },
+	      this.displayRecipe(),
+	      React.createElement(MoreInfoButton, { recipeId: this.props.recipe.id })
 	    );
 	  }
 	});
@@ -35031,6 +35042,129 @@
 	};
 	
 	module.exports = AddRecipeForm;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// COMPONENTS
+	var RecipeInfo = __webpack_require__(285);
+	var Modal = __webpack_require__(261);
+	
+	// MODAL STYLES
+	var modalStyle = {
+	  transform: 'inherit',
+	  width: '300px',
+	  transform: 'translate(-50%, -50%)',
+	  border: '1px solid black',
+	  borderRadius: '3px'
+	};
+	
+	var backdropStyle = {
+	  backgroundColor: 'rgba(0, 0, 0, 0.2)'
+	};
+	
+	var contentStyle = {
+	  height: '100%',
+	  padding: '20px'
+	};
+	
+	var MoreInfoButton = React.createClass({
+	  displayName: 'MoreInfoButton',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      open: false
+	    };
+	  },
+	
+	  showModal: function (event) {
+	    event.preventDefault();
+	    this.refs.modal.show();
+	    this.setState({ open: true });
+	  },
+	
+	  hideModal: function () {
+	    this.refs.modal.hide();
+	    this.setState({ open: false });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'moreInfo' },
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.showModal },
+	        '...'
+	      ),
+	      React.createElement(
+	        Modal,
+	        { ref: 'modal',
+	          contentStyle: contentStyle,
+	          modalStyle: modalStyle,
+	          backdropStyle: backdropStyle },
+	        React.createElement(RecipeInfo, { modalCallback: this.hideModal, recipeId: this.props.recipeId })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = MoreInfoButton;
+
+/***/ },
+/* 285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// FLUX
+	var RecipeStore = __webpack_require__(278);
+	
+	var RecipeInfo = React.createClass({
+	  displayName: 'RecipeInfo',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      recipe: RecipeStore.findById(this.props.recipeId)
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.recipeListener = RecipeStore.addListener(this.update);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.recipeListener.remove();
+	  },
+	
+	  update: function () {
+	    this.setState({ recipe: RecipeStore.findById(this.state.recipeId) });
+	  },
+	
+	  openLink: function () {
+	    window.open(this.state.recipe.url, '_blank');
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'recipeInfo flexColumn' },
+	      this.state.recipe.title,
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.openLink },
+	        'Go!'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = RecipeInfo;
 
 /***/ }
 /******/ ]);
