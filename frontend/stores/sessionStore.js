@@ -30,18 +30,19 @@ SessionStore.__onDispatch = function(payload) {
 var login = function(user) {
   _loggedInUser = user;
   _loggedIn = true;
-  var foodieUser = JSON.stringify(user);
-  localStorage['foodieUser'] = foodieUser;
+  var noodleUser = JSON.stringify(user);
+  localStorage['noodleUser'] = noodleUser;
 }
 
 var logout = function() {
-  localStorage.removeItem('foodieUser');
+  localStorage.removeItem('noodleUser');
+  localStorage.removeItem('noodleSearch');
   _loggedInUser = null;
   _loggedIn = false;
 }
 
 var checkForLogin = function() {
-  var user = localStorage['foodieUser'];
+  var user = localStorage['noodleUser'];
   if(user) {
     _loggedInUser = JSON.parse(user);
     _loggedIn = true;

@@ -5,6 +5,7 @@ var HashHistory = require('react-router').hashHistory;
 
 // FLUX
 var SessionStore = require('../stores/sessionStore');
+var UserStore = require('../stores/userStore');
 
 // COMPONENTS
 var Header = require('./header/header');
@@ -22,10 +23,12 @@ var App = React.createClass({
 
   componentDidMount: function() {
     this.sessionListener = SessionStore.addListener(this.sessionUpdate);
+    this.userListener = UserStore.addListener(this.userUpdate);
   },
 
   componentWillUnmount: function() {
     this.sessionListener.remove();
+    this.userListener.remove();
   },
 
   sessionUpdate: function() {
@@ -35,16 +38,24 @@ var App = React.createClass({
     });
   },
 
+  userUpdate: function() {
+    this.setState({
+      user: UserStore.user()
+    });
+  },
+
   welcome: function() {
-    if (this.state.loggedIn) {
+    if (this.state.loggedIn && this.state.user.id === SessionStore.user().id) {
       return "Welcome, " + this.state.user.username + "!";
+    } else if (!this.state.loggedIn) {
+      return "Login to create and save recipes!"
     } else {
-      return ""
+      return "~ " + this.state.user.username + "'s recipes ~"
     }
   },
 
   getUserId: function() {
-    if (this.state.loggedIn) {
+    if (this.state.user) {
       return this.state.user.id
     } else {
       return -1
@@ -57,7 +68,7 @@ var App = React.createClass({
         <Header loggedIn={this.state.loggedIn}/>
         <div className="app">
           {this.welcome()}
-          <RecipeIndex userId={this.getUserId()}/>
+          <RecipeIndex userId={ this.getUserId() } />
         </div>
         <Footer />
       </div>

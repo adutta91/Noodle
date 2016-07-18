@@ -1,5 +1,8 @@
 var React = require('react');
 
+// FLUX
+var UserUtil = require('../../utils/userUtil');
+
 var UserSearch = React.createClass({
 
   getInitialState: function() {
@@ -8,12 +11,13 @@ var UserSearch = React.createClass({
     });
   },
 
+  valueChange: function(event) {
+    this.setState({ searchValue: event.currentTarget.value });
+  },
+
   keyPress: function(event) {
-    event.preventDefault();
     if (event.key === "Enter") {
-      console.log("search!!!! " + this.state.searchValue );
-    } else {
-      this.setState({ searchValue: this.state.searchValue + event.key });
+      UserUtil.fetchUserInfo(this.state.searchValue);
     }
   },
 
@@ -22,6 +26,7 @@ var UserSearch = React.createClass({
       <div>
         <input className="search"
                type="text"
+               onChange={this.valueChange}
                onKeyPress={this.keyPress}
                placeholder="search users"
                value={this.state.searchValue}/>

@@ -21097,6 +21097,7 @@
 	
 	// FLUX
 	var SessionStore = __webpack_require__(235);
+	var UserStore = __webpack_require__(290);
 	
 	// COMPONENTS
 	var Header = __webpack_require__(257);
@@ -21116,10 +21117,12 @@
 	
 	  componentDidMount: function () {
 	    this.sessionListener = SessionStore.addListener(this.sessionUpdate);
+	    this.userListener = UserStore.addListener(this.userUpdate);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.sessionListener.remove();
+	    this.userListener.remove();
 	  },
 	
 	  sessionUpdate: function () {
@@ -21129,16 +21132,24 @@
 	    });
 	  },
 	
+	  userUpdate: function () {
+	    this.setState({
+	      user: UserStore.user()
+	    });
+	  },
+	
 	  welcome: function () {
-	    if (this.state.loggedIn) {
+	    if (this.state.loggedIn && this.state.user.id === SessionStore.user().id) {
 	      return "Welcome, " + this.state.user.username + "!";
+	    } else if (!this.state.loggedIn) {
+	      return "Login to create and save recipes!";
 	    } else {
-	      return "";
+	      return "~ " + this.state.user.username + "'s recipes ~";
 	    }
 	  },
 	
 	  getUserId: function () {
-	    if (this.state.loggedIn) {
+	    if (this.state.user) {
 	      return this.state.user.id;
 	    } else {
 	      return -1;
@@ -26753,18 +26764,19 @@
 	var login = function (user) {
 	  _loggedInUser = user;
 	  _loggedIn = true;
-	  var foodieUser = JSON.stringify(user);
-	  localStorage['foodieUser'] = foodieUser;
+	  var noodleUser = JSON.stringify(user);
+	  localStorage['noodleUser'] = noodleUser;
 	};
 	
 	var logout = function () {
-	  localStorage.removeItem('foodieUser');
+	  localStorage.removeItem('noodleUser');
+	  localStorage.removeItem('noodleSearch');
 	  _loggedInUser = null;
 	  _loggedIn = false;
 	};
 	
 	var checkForLogin = function () {
-	  var user = localStorage['foodieUser'];
+	  var user = localStorage['noodleUser'];
 	  if (user) {
 	    _loggedInUser = JSON.parse(user);
 	    _loggedIn = true;
@@ -34612,7 +34624,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	
+	var RecipeUtil = __webpack_require__(279);
+	
 	var SessionActions = __webpack_require__(259);
+	var UserActions = __webpack_require__(289);
 	
 	module.exports = {
 	  createUser: function (user) {
@@ -34622,6 +34637,20 @@
 	      data: user,
 	      success: function (user) {
 	        SessionActions.loginUser(user);
+	      },
+	      error: function (error) {
+	        alert(error.responseText);
+	      }
+	    });
+	  },
+	
+	  fetchUserInfo: function (username) {
+	    $.ajax({
+	      url: 'api/users/' + username,
+	      method: 'GET',
+	      success: function (userInfo) {
+	        UserActions.receiveUser(userInfo);
+	        RecipeUtil.fetchUserRecipes(userInfo.id);
 	      },
 	      error: function (error) {
 	        alert(error.responseText);
@@ -35265,8 +35294,11 @@
 
 	var React = __webpack_require__(1);
 	
+	// FLUX
+	var UserUtil = __webpack_require__(274);
+	
 	var UserSearch = React.createClass({
-	  displayName: "UserSearch",
+	  displayName: 'UserSearch',
 	
 	
 	  getInitialState: function () {
@@ -35275,29 +35307,85 @@
 	    };
 	  },
 	
+	  valueChange: function (event) {
+	    this.setState({ searchValue: event.currentTarget.value });
+	  },
+	
 	  keyPress: function (event) {
-	    event.preventDefault();
 	    if (event.key === "Enter") {
-	      console.log("search!!!! " + this.state.searchValue);
-	    } else {
-	      this.setState({ searchValue: this.state.searchValue + event.key });
+	      UserUtil.fetchUserInfo(this.state.searchValue);
 	    }
 	  },
 	
 	  render: function () {
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
-	      React.createElement("input", { className: "search",
-	        type: "text",
+	      React.createElement('input', { className: 'search',
+	        type: 'text',
+	        onChange: this.valueChange,
 	        onKeyPress: this.keyPress,
-	        placeholder: "search users",
+	        placeholder: 'search users',
 	        value: this.state.searchValue })
 	    );
 	  }
 	});
 	
 	module.exports = UserSearch;
+
+/***/ },
+/* 289 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(254);
+	
+	module.exports = {
+	  receiveUser: function (user) {
+	    Dispatcher.dispatch({
+	      actionType: 'RECEIVE_USER',
+	      user: user
+	    });
+	  }
+	};
+
+/***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(236).Store;
+	var Dispatcher = __webpack_require__(254);
+	
+	var UserStore = new Store(Dispatcher);
+	
+	var _user = {};
+	
+	UserStore.user = function () {
+	  return _user;
+	};
+	
+	UserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case 'RECEIVE_USER':
+	      resetUser(payload.user);
+	      UserStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	var resetUser = function (user) {
+	  _user = user;
+	  localStorage['noodleSearch'] = JSON.stringify(user);
+	};
+	
+	var checkLocalStorage = function () {
+	  if (localStorage['noodleSearch']) {
+	    _user = JSON.parse(localStorage['noodleSearch']);
+	  }
+	};
+	
+	checkLocalStorage();
+	
+	module.exports = UserStore;
 
 /***/ }
 /******/ ]);

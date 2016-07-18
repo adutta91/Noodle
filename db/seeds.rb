@@ -10,6 +10,11 @@ user.username = "adutta"
 user.password = "password"
 user.save!
 
+user = User.new
+user.username = "ecombs"
+user.password = "password"
+user.save!
+
 
 recipe = Recipe.new
 recipe.title = 'fondue'
@@ -30,4 +35,26 @@ recipe.title = 'soup'
 recipe.url = 'http://www.facebook.com'
 recipe.user_id = 1
 recipe.description = "grandma's soup - with beets and butternut squash"
+recipe.save!
+
+
+recipe = Recipe.new
+recipe.title = 'bonbons'
+recipe.url = 'http://www.google.com'
+recipe.user_id = 2
+recipe.description = 'simple bonbon that tastes awesome'
+recipe.save!
+
+recipe = Recipe.new
+recipe.title = 'pizza'
+recipe.url = 'http://www.yahoo.com'
+recipe.user_id = 2
+recipe.description = "easy pizza that's really healthy"
+recipe.save!
+
+recipe = Recipe.new
+recipe.title = 'fudge'
+recipe.url = 'http://www.facebook.com'
+recipe.user_id = 2
+recipe.description = "grandpa's fudge - best thing ever"
 recipe.save!

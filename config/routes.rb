@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
     resource :users, only: [:create]
     get '/users/:id/recipes', to: 'users#recipes'
+    get '/users/:username', to: 'users#search_user'
 
     resource :recipes, only: [:create, :show]
     patch '/recipes/:id', to: 'recipes#destroy'

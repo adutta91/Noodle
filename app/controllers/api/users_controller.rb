@@ -31,6 +31,10 @@ class Api::UsersController < ApplicationController
     render :show_recipes
   end
 
+  def search_user
+    @user = User.find_by_username(params[:username])
+  end
+
   private
   def user_params
     params.require(:user).permit(:username, :password, :id)
