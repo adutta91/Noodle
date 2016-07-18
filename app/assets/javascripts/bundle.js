@@ -34816,6 +34816,22 @@
 	        }
 	      });
 	    }
+	  },
+	
+	  createRecipe: function (recipe) {
+	    var that = this;
+	    $.ajax({
+	      url: 'api/recipes',
+	      method: 'POST',
+	      data: recipe,
+	      success: function (response) {
+	        console.log("recipe add success");
+	        that.fetchUserRecipes(recipe.recipe.user_id);
+	      },
+	      error: function (error) {
+	        alert(error.responseText);
+	      }
+	    });
 	  }
 	};
 
@@ -34945,17 +34961,74 @@
 
 	var React = __webpack_require__(1);
 	
+	// FLUX
+	var RecipeUtil = __webpack_require__(279);
+	var SessionStore = __webpack_require__(235);
+	
 	var AddRecipeForm = React.createClass({
-	  displayName: "AddRecipeForm",
+	  displayName: 'AddRecipeForm',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      title: "",
+	      url: ""
+	    };
+	  },
+	
+	  titleChange: function (event) {
+	    event.preventDefault();
+	    this.setState({ title: event.currentTarget.value });
+	  },
+	
+	  urlChange: function (event) {
+	    event.preventDefault();
+	    this.setState({ url: event.currentTarget.value });
+	  },
+	
+	  createRecipe: function (event) {
+	    event.preventDefault();
+	    var url = makeSafeUrl(this.state.url);
+	    var recipe = {
+	      recipe: {
+	        title: this.state.title,
+	        url: url,
+	        user_id: SessionStore.user().id
+	      }
+	    };
+	    RecipeUtil.createRecipe(recipe);
+	    this.props.modalCallback();
+	  },
 	
 	  render: function () {
 	    return React.createElement(
-	      "div",
-	      { className: "addRecipe form" },
-	      "This is an add recipe form"
+	      'div',
+	      { className: 'addRecipe form' },
+	      React.createElement('input', { type: 'text', placeholder: 'title', value: this.state.title, onChange: this.titleChange }),
+	      React.createElement('input', { type: 'text', placeholder: 'url', value: this.state.url, onChange: this.urlChange }),
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.createRecipe },
+	        'Add'
+	      )
 	    );
 	  }
 	});
+	
+	var makeSafeUrl = function (str) {
+	  var http = "http://";
+	  var https = "https:/";
+	  if (str.length > 7) {
+	    var prefix = str.slice(0, 7);
+	    if (prefix === http || prefix === https) {
+	      return str;
+	    } else {
+	      return http + str;
+	    }
+	  } else {
+	    return http + str;
+	  }
+	};
 	
 	module.exports = AddRecipeForm;
 

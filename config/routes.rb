@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
     resource :users, only: [:create]
     get '/users/:id/recipes', to: 'users#recipes'
+
+    resource :recipes, only: [:create, :show]
+
   end
 
 end

@@ -15,5 +15,21 @@ module.exports = {
         }
       });
     }
+  },
+
+  createRecipe: function(recipe) {
+    var that = this;
+    $.ajax({
+      url: 'api/recipes',
+      method: 'POST',
+      data: recipe,
+      success: function(response) {
+        console.log("recipe add success");
+        that.fetchUserRecipes(recipe.recipe.user_id);
+      },
+      error: function(error) {
+        alert(error.responseText)
+      }
+    })
   }
 }
