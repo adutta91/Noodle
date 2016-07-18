@@ -38,7 +38,7 @@ var RecipeInfo = React.createClass({
     if (recipe) {
       return (
         <div className="recipeInfo flexColumn">
-          {recipe.title}
+          <h3>{recipe.title}</h3>
           <p>{recipe.description}</p>
           <div className="links flexRow">
             <div className="openLink icon" onClick={this.openLink}>Go!</div>

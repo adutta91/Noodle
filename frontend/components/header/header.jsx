@@ -12,6 +12,7 @@ var LoginButton = require('./loginButton');
 var LogoutButton = require('./logoutButton');
 var SignUpButton = require('./signUpButton');
 var ProfileButton = require('./profileButton');
+var UserSearch = require('../userSearch/userSearch');
 
 var Header = React.createClass({
 
@@ -33,7 +34,7 @@ var Header = React.createClass({
     this.setState({ loggedIn: SessionStore.loggedIn() });
   },
 
-  getButton: function() {
+  getButtons: function() {
     if (this.state.loggedIn) {
       return (
         <div className="flexRow headerButtons">
@@ -54,11 +55,12 @@ var Header = React.createClass({
   render: function() {
     return (
       <div className="header flexRow">
+        <UserSearch />
         <h2 className="title">
           Noodle
         </h2>
         <img className="logo" src={Urls.noodleIcon}/>
-        {this.getButton()}
+        {this.getButtons()}
       </div>
     )
   }

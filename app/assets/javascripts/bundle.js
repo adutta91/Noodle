@@ -33552,6 +33552,7 @@
 	var LogoutButton = __webpack_require__(271);
 	var SignUpButton = __webpack_require__(272);
 	var ProfileButton = __webpack_require__(275);
+	var UserSearch = __webpack_require__(288);
 	
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -33575,7 +33576,7 @@
 	    this.setState({ loggedIn: SessionStore.loggedIn() });
 	  },
 	
-	  getButton: function () {
+	  getButtons: function () {
 	    if (this.state.loggedIn) {
 	      return React.createElement(
 	        'div',
@@ -33597,13 +33598,14 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'header flexRow' },
+	      React.createElement(UserSearch, null),
 	      React.createElement(
 	        'h2',
 	        { className: 'title' },
 	        'Noodle'
 	      ),
 	      React.createElement('img', { className: 'logo', src: Urls.noodleIcon }),
-	      this.getButton()
+	      this.getButtons()
 	    );
 	  }
 	});
@@ -35178,7 +35180,11 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'recipeInfo flexColumn' },
-	        recipe.title,
+	        React.createElement(
+	          'h3',
+	          null,
+	          recipe.title
+	        ),
 	        React.createElement(
 	          'p',
 	          null,
@@ -35252,6 +35258,46 @@
 	  noodleIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png",
 	  trashIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468875634/Noodle/trash.png"
 	};
+
+/***/ },
+/* 288 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var UserSearch = React.createClass({
+	  displayName: "UserSearch",
+	
+	
+	  getInitialState: function () {
+	    return {
+	      searchValue: ""
+	    };
+	  },
+	
+	  keyPress: function (event) {
+	    event.preventDefault();
+	    if (event.key === "Enter") {
+	      console.log("search!!!! " + this.state.searchValue);
+	    } else {
+	      this.setState({ searchValue: this.state.searchValue + event.key });
+	    }
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement("input", { className: "search",
+	        type: "text",
+	        onKeyPress: this.keyPress,
+	        placeholder: "search users",
+	        value: this.state.searchValue })
+	    );
+	  }
+	});
+	
+	module.exports = UserSearch;
 
 /***/ }
 /******/ ]);
