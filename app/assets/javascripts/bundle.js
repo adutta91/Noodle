@@ -34836,8 +34836,21 @@
 	      method: 'POST',
 	      data: recipe,
 	      success: function (response) {
-	        console.log("recipe add success");
 	        that.fetchUserRecipes(recipe.recipe.user_id);
+	      },
+	      error: function (error) {
+	        alert(error.responseText);
+	      }
+	    });
+	  },
+	
+	  deleteRecipe: function (id, userId) {
+	    var that = this;
+	    $.ajax({
+	      url: 'api/recipes/' + id,
+	      method: 'PATCH',
+	      success: function () {
+	        that.fetchUserRecipes(userId);
 	      },
 	      error: function (error) {
 	        alert(error.responseText);
@@ -34869,6 +34882,7 @@
 	
 	// COMPONENTS
 	var MoreInfoButton = __webpack_require__(284);
+	var DeleteRecipeButton = __webpack_require__(286);
 	
 	var Recipe = React.createClass({
 	  displayName: 'Recipe',
@@ -34884,11 +34898,12 @@
 	  },
 	
 	  render: function () {
+	    var recipeId = this.props.recipe.id;
 	    return React.createElement(
 	      'div',
 	      { className: 'recipe flexColumn' },
 	      this.displayRecipe(),
-	      React.createElement(MoreInfoButton, { recipeId: this.props.recipe.id })
+	      React.createElement(MoreInfoButton, { recipeId: recipeId })
 	    );
 	  }
 	});
@@ -35124,6 +35139,9 @@
 	// FLUX
 	var RecipeStore = __webpack_require__(278);
 	
+	// COMPONENTS
+	var DeleteRecipeButton = __webpack_require__(286);
+	
 	var RecipeInfo = React.createClass({
 	  displayName: 'RecipeInfo',
 	
@@ -35150,21 +35168,69 @@
 	    window.open(this.state.recipe.url, '_blank');
 	  },
 	
+	  displayRecipe: function () {
+	    var recipe = this.state.recipe;
+	    if (recipe) {
+	      return React.createElement(
+	        'div',
+	        { className: 'recipeInfo flexColumn' },
+	        recipe.title,
+	        React.createElement(
+	          'div',
+	          { className: 'button', onClick: this.openLink },
+	          'Go!'
+	        ),
+	        React.createElement(DeleteRecipeButton, { onClick: this.props.modalCallback, recipeId: recipe.id })
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  },
+	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'recipeInfo flexColumn' },
-	      this.state.recipe.title,
-	      React.createElement(
-	        'div',
-	        { className: 'button', onClick: this.openLink },
-	        'Go!'
-	      )
+	      null,
+	      this.displayRecipe()
 	    );
 	  }
 	});
 	
 	module.exports = RecipeInfo;
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// FLUX
+	var RecipeUtil = __webpack_require__(279);
+	var SessionStore = __webpack_require__(235);
+	
+	var DeleteRecipeButton = React.createClass({
+	  displayName: 'DeleteRecipeButton',
+	
+	
+	  deleteRecipe: function (event) {
+	    event.preventDefault();
+	    RecipeUtil.deleteRecipe(this.props.recipeId, SessionStore.user().id);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'deleteRecipe' },
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.deleteRecipe },
+	        'X'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = DeleteRecipeButton;
 
 /***/ }
 /******/ ]);

@@ -3,6 +3,9 @@ var React = require('react');
 // FLUX
 var RecipeStore = require('../../stores/recipeStore');
 
+// COMPONENTS
+var DeleteRecipeButton = require('./deleteRecipeButton');
+
 var RecipeInfo = React.createClass({
 
   getInitialState: function() {
@@ -30,11 +33,25 @@ var RecipeInfo = React.createClass({
     )
   },
 
+  displayRecipe: function() {
+    var recipe = this.state.recipe;
+    if (recipe) {
+      return (
+        <div className="recipeInfo flexColumn">
+          {recipe.title}
+          <div className="button" onClick={this.openLink}>Go!</div>
+          <DeleteRecipeButton onClick={this.props.modalCallback} recipeId={recipe.id} />
+        </div>
+      )
+    } else {
+      return (<div />)
+    }
+  },
+
   render: function() {
     return (
-      <div className="recipeInfo flexColumn">
-        {this.state.recipe.title}
-        <div className="button" onClick={this.openLink}>Go!</div>
+      <div>
+        {this.displayRecipe()}
       </div>
     )
   }

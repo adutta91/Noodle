@@ -13,6 +13,7 @@ class Api::RecipesController < ApplicationController
     if @recipe
       @recipe.destroy
     end
+    render json: {message: "recipe deleted"}
   end
 
   private

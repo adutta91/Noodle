@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get '/users/:id/recipes', to: 'users#recipes'
 
     resource :recipes, only: [:create, :show]
+    patch '/recipes/:id', to: 'recipes#destroy'
 
   end
 

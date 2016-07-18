@@ -2,6 +2,7 @@ var React = require('react');
 
 // COMPONENTS
 var MoreInfoButton = require('./moreInfoButton');
+var DeleteRecipeButton = require('./deleteRecipeButton');
 
 var Recipe = React.createClass({
 
@@ -15,10 +16,11 @@ var Recipe = React.createClass({
   },
 
   render: function() {
+    var recipeId = this.props.recipe.id;
     return (
       <div className="recipe flexColumn">
         {this.displayRecipe()}
-        <MoreInfoButton recipeId={this.props.recipe.id}/>
+        <MoreInfoButton recipeId={recipeId}/>
       </div>
     )
   }

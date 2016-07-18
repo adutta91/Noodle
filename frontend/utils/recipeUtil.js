@@ -24,8 +24,21 @@ module.exports = {
       method: 'POST',
       data: recipe,
       success: function(response) {
-        console.log("recipe add success");
         that.fetchUserRecipes(recipe.recipe.user_id);
+      },
+      error: function(error) {
+        alert(error.responseText)
+      }
+    })
+  },
+
+  deleteRecipe: function(id, userId) {
+    var that = this;
+    $.ajax({
+      url: 'api/recipes/' + id,
+      method: 'PATCH',
+      success: function() {
+        that.fetchUserRecipes(userId)
       },
       error: function(error) {
         alert(error.responseText)
