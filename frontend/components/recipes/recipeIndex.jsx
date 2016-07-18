@@ -6,6 +6,7 @@ var RecipeUtil = require('../../utils/recipeUtil');
 
 // COMPONENTS
 var Recipe = require('./recipe');
+var AddRecipeButton = require('./addRecipeButton');
 
 var RecipeIndex = React.createClass({
   getInitialState: function() {
@@ -43,8 +44,11 @@ var RecipeIndex = React.createClass({
 
   render: function() {
     return (
-      <div className="recipeList flexRow">
-        {this.displayRecipes()}
+      <div>
+        <div className="recipeList flexRow">
+          {this.displayRecipes()}
+        </div>
+        <AddRecipeButton />
       </div>
     )
   }

@@ -34711,6 +34711,7 @@
 	
 	// COMPONENTS
 	var Recipe = __webpack_require__(281);
+	var AddRecipeButton = __webpack_require__(282);
 	
 	var RecipeIndex = React.createClass({
 	  displayName: 'RecipeIndex',
@@ -34751,8 +34752,13 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'recipeList flexRow' },
-	      this.displayRecipes()
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'recipeList flexRow' },
+	        this.displayRecipes()
+	      ),
+	      React.createElement(AddRecipeButton, null)
 	    );
 	  }
 	});
@@ -34861,6 +34867,97 @@
 	});
 	
 	module.exports = Recipe;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// COMPONENTS
+	var Modal = __webpack_require__(261);
+	var AddRecipeForm = __webpack_require__(283);
+	
+	// MODAL STYLES
+	var modalStyle = {
+	  transform: 'inherit',
+	  width: '300px',
+	  transform: 'translate(-50%, -50%)',
+	  border: '1px solid black',
+	  borderRadius: '3px'
+	};
+	
+	var backdropStyle = {
+	  backgroundColor: 'rgba(0, 0, 0, 0.2)'
+	};
+	
+	var contentStyle = {
+	  height: '100%',
+	  padding: '20px'
+	};
+	
+	var AddRecipeButton = React.createClass({
+	  displayName: 'AddRecipeButton',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      open: false
+	    };
+	  },
+	
+	  showModal: function () {
+	    this.refs.modal.show();
+	    this.setState({ open: true });
+	  },
+	
+	  hideModal: function () {
+	    this.refs.modal.hide();
+	    this.setState({ open: false });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'addRecipe flexRow' },
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.showModal },
+	        'Add Recipe'
+	      ),
+	      React.createElement(
+	        Modal,
+	        { ref: 'modal',
+	          contentStyle: contentStyle,
+	          modalStyle: modalStyle,
+	          backdropStyle: backdropStyle },
+	        React.createElement(AddRecipeForm, { modalCallback: this.hideModal })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = AddRecipeButton;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var AddRecipeForm = React.createClass({
+	  displayName: "AddRecipeForm",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "addRecipe form" },
+	      "This is an add recipe form"
+	    );
+	  }
+	});
+	
+	module.exports = AddRecipeForm;
 
 /***/ }
 /******/ ]);
