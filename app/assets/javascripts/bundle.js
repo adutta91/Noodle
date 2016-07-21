@@ -34871,6 +34871,7 @@
 	  keyPress: function (event) {
 	    if (event.key === "Enter") {
 	      UserUtil.fetchUserInfo(this.state.searchValue);
+	      this.setState({ searchValue: "" });
 	    }
 	  },
 	
