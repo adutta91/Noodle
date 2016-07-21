@@ -67,8 +67,8 @@ var App = React.createClass({
       <div className="flexColumn">
         <Header loggedIn={this.state.loggedIn}/>
         <div className="app">
-          {this.welcome()}
-          <RecipeIndex userId={ this.getUserId() } />
+          { this.welcome() }
+          <RecipeIndex />
         </div>
         <Footer />
       </div>

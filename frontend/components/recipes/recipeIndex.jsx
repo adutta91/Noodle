@@ -2,6 +2,7 @@ var React = require('react');
 
 // FLUX
 var RecipeStore = require('../../stores/recipeStore');
+var SessionStore = require('../../stores/sessionStore');
 var RecipeUtil = require('../../utils/recipeUtil');
 
 // COMPONENTS
@@ -16,7 +17,7 @@ var RecipeIndex = React.createClass({
   },
 
   componentDidMount: function() {
-    RecipeUtil.fetchUserRecipes(this.props.userId);
+    fetchRecipes();
     this.recipeListener = RecipeStore.addListener(this.updateRecipes);
   },
 
@@ -53,5 +54,13 @@ var RecipeIndex = React.createClass({
     )
   }
 });
+
+var fetchRecipes = function() {
+  if (RecipeStore.recipes().length > 0) {
+    return;
+  } else {
+    RecipeUtil.fetchUserRecipes(SessionStore.user().id);
+  }
+};
 
 module.exports = RecipeIndex;

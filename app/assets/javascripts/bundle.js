@@ -21097,12 +21097,12 @@
 	
 	// FLUX
 	var SessionStore = __webpack_require__(235);
-	var UserStore = __webpack_require__(290);
+	var UserStore = __webpack_require__(257);
 	
 	// COMPONENTS
-	var Header = __webpack_require__(257);
-	var Footer = __webpack_require__(276);
-	var RecipeIndex = __webpack_require__(277);
+	var Header = __webpack_require__(258);
+	var Footer = __webpack_require__(282);
+	var RecipeIndex = __webpack_require__(283);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -21165,7 +21165,7 @@
 	        'div',
 	        { className: 'app' },
 	        this.welcome(),
-	        React.createElement(RecipeIndex, { userId: this.getUserId() })
+	        React.createElement(RecipeIndex, null)
 	      ),
 	      React.createElement(Footer, null)
 	    );
@@ -33550,21 +33550,60 @@
 /* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var Store = __webpack_require__(236).Store;
+	var Dispatcher = __webpack_require__(254);
+	
+	var UserStore = new Store(Dispatcher);
+	
+	var _user = {};
+	
+	UserStore.user = function () {
+	  return _user;
+	};
+	
+	UserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case 'RECEIVE_USER':
+	      resetUser(payload.user);
+	      UserStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	var resetUser = function (user) {
+	  _user = user;
+	  localStorage['noodleSearch'] = JSON.stringify(user);
+	};
+	
+	var checkLocalStorage = function () {
+	  if (localStorage['noodleSearch']) {
+	    _user = JSON.parse(localStorage['noodleSearch']);
+	  }
+	};
+	
+	checkLocalStorage();
+	
+	module.exports = UserStore;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	
 	// FLUX
 	var SessionStore = __webpack_require__(235);
-	var SessionUtil = __webpack_require__(258);
+	var SessionUtil = __webpack_require__(259);
 	
 	// OBJECTS
-	var Urls = __webpack_require__(287);
+	var Urls = __webpack_require__(263);
 	
 	// COMPONENTS
-	var LoginButton = __webpack_require__(260);
-	var LogoutButton = __webpack_require__(271);
-	var SignUpButton = __webpack_require__(272);
-	var ProfileButton = __webpack_require__(275);
-	var UserSearch = __webpack_require__(288);
+	var LoginButton = __webpack_require__(264);
+	var LogoutButton = __webpack_require__(275);
+	var SignUpButton = __webpack_require__(276);
+	var ProfileButton = __webpack_require__(280);
+	var UserSearch = __webpack_require__(281);
 	
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -33625,14 +33664,14 @@
 	module.exports = Header;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// FLUX
-	var SessionActions = __webpack_require__(259);
-	var RecipeActions = __webpack_require__(280);
+	var SessionActions = __webpack_require__(260);
+	var RecipeActions = __webpack_require__(261);
 	
-	var RecipeUtil = __webpack_require__(279);
+	var RecipeUtil = __webpack_require__(262);
 	
 	module.exports = {
 	  loginUser: function (user) {
@@ -33667,7 +33706,7 @@
 	};
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(254);
@@ -33688,17 +33727,94 @@
 	};
 
 /***/ },
-/* 260 */
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(254);
+	
+	module.exports = {
+	  receiveRecipes: function (recipes) {
+	    Dispatcher.dispatch({
+	      actionType: 'RECEIVE_RECIPES',
+	      recipes: recipes
+	    });
+	  }
+	};
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	var RecipeActions = __webpack_require__(261);
+	
+	module.exports = {
+	  fetchUserRecipes: function (id) {
+	    if (id > 0) {
+	      $.ajax({
+	        url: 'api/users/' + id + '/recipes',
+	        method: 'GET',
+	        success: function (recipes) {
+	          RecipeActions.receiveRecipes(recipes);
+	        },
+	        error: function (error) {
+	          alert(error.responseText);
+	        }
+	      });
+	    }
+	  },
+	
+	  createRecipe: function (recipe) {
+	    var that = this;
+	    $.ajax({
+	      url: 'api/recipes',
+	      method: 'POST',
+	      data: recipe,
+	      success: function (response) {
+	        that.fetchUserRecipes(recipe.recipe.user_id);
+	      },
+	      error: function (error) {
+	        alert(error.responseText);
+	      }
+	    });
+	  },
+	
+	  deleteRecipe: function (id, userId) {
+	    var that = this;
+	    $.ajax({
+	      url: 'api/recipes/' + id,
+	      method: 'PATCH',
+	      success: function () {
+	        that.fetchUserRecipes(userId);
+	      },
+	      error: function (error) {
+	        alert(error.responseText);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 263 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  noodleIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png",
+	  trashIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468875634/Noodle/trash.png"
+	};
+
+/***/ },
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// FLUX
-	var SessionUtil = __webpack_require__(258);
+	var SessionUtil = __webpack_require__(259);
 	
 	// COMPONENTS
-	var Modal = __webpack_require__(261);
-	var LoginForm = __webpack_require__(270);
+	var Modal = __webpack_require__(265);
+	var LoginForm = __webpack_require__(274);
 	
 	// MODAL STYLES
 	var modalStyle = {
@@ -33762,13 +33878,13 @@
 	module.exports = LoginButton;
 
 /***/ },
-/* 261 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var modalFactory = __webpack_require__(262);
-	var insertKeyframesRule = __webpack_require__(267);
-	var appendVendorPrefix = __webpack_require__(264);
+	var modalFactory = __webpack_require__(266);
+	var insertKeyframesRule = __webpack_require__(271);
+	var appendVendorPrefix = __webpack_require__(268);
 	
 	var animation = {
 	    show: {
@@ -33914,12 +34030,12 @@
 
 
 /***/ },
-/* 262 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var transitionEvents = __webpack_require__(263);
-	var appendVendorPrefix = __webpack_require__(264);
+	var transitionEvents = __webpack_require__(267);
+	var appendVendorPrefix = __webpack_require__(268);
 	
 	module.exports = function(animation){
 	
@@ -34098,7 +34214,7 @@
 
 
 /***/ },
-/* 263 */
+/* 267 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34199,12 +34315,12 @@
 
 
 /***/ },
-/* 264 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var getVendorPropertyName = __webpack_require__(265);
+	var getVendorPropertyName = __webpack_require__(269);
 	
 	module.exports = function(target, sources) {
 	  var to = Object(target);
@@ -34235,12 +34351,12 @@
 
 
 /***/ },
-/* 265 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var builtinStyle = __webpack_require__(266);
+	var builtinStyle = __webpack_require__(270);
 	var prefixes = ['Moz', 'Webkit', 'O', 'ms'];
 	var domVendorPrefix;
 	
@@ -34278,7 +34394,7 @@
 
 
 /***/ },
-/* 266 */
+/* 270 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34287,13 +34403,13 @@
 
 
 /***/ },
-/* 267 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var insertRule = __webpack_require__(268);
-	var vendorPrefix = __webpack_require__(269)();
+	var insertRule = __webpack_require__(272);
+	var vendorPrefix = __webpack_require__(273)();
 	var index = 0;
 	
 	module.exports = function(keyframes) {
@@ -34323,7 +34439,7 @@
 
 
 /***/ },
-/* 268 */
+/* 272 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34348,7 +34464,7 @@
 
 
 /***/ },
-/* 269 */
+/* 273 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34367,13 +34483,13 @@
 
 
 /***/ },
-/* 270 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// FLUX
-	var SessionUtil = __webpack_require__(258);
+	var SessionUtil = __webpack_require__(259);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -34443,13 +34559,13 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 271 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// FLUX
-	var SessionUtil = __webpack_require__(258);
+	var SessionUtil = __webpack_require__(259);
 	var SessionStore = __webpack_require__(235);
 	
 	var LogoutButton = React.createClass({
@@ -34473,14 +34589,14 @@
 	module.exports = LogoutButton;
 
 /***/ },
-/* 272 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// COMPONENTS
-	var Modal = __webpack_require__(261);
-	var SignUpForm = __webpack_require__(273);
+	var Modal = __webpack_require__(265);
+	var SignUpForm = __webpack_require__(277);
 	
 	// MODAL STYLES
 	var modalStyle = {
@@ -34544,13 +34660,13 @@
 	module.exports = SignUpButton;
 
 /***/ },
-/* 273 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// FLUX
-	var UserUtil = __webpack_require__(274);
+	var UserUtil = __webpack_require__(278);
 	
 	var SignUpForm = React.createClass({
 	  displayName: 'SignUpForm',
@@ -34620,14 +34736,14 @@
 	module.exports = SignUpForm;
 
 /***/ },
-/* 274 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var RecipeUtil = __webpack_require__(279);
+	var RecipeUtil = __webpack_require__(262);
 	
-	var SessionActions = __webpack_require__(259);
-	var UserActions = __webpack_require__(289);
+	var SessionActions = __webpack_require__(260);
+	var UserActions = __webpack_require__(279);
 	
 	module.exports = {
 	  createUser: function (user) {
@@ -34660,7 +34776,22 @@
 	};
 
 /***/ },
-/* 275 */
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(254);
+	
+	module.exports = {
+	  receiveUser: function (user) {
+	    Dispatcher.dispatch({
+	      actionType: 'RECEIVE_USER',
+	      user: user
+	    });
+	  }
+	};
+
+/***/ },
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -34715,7 +34846,52 @@
 	module.exports = ProfileButton;
 
 /***/ },
-/* 276 */
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// FLUX
+	var UserUtil = __webpack_require__(278);
+	
+	var UserSearch = React.createClass({
+	  displayName: 'UserSearch',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      searchValue: ""
+	    };
+	  },
+	
+	  valueChange: function (event) {
+	    this.setState({ searchValue: event.currentTarget.value });
+	  },
+	
+	  keyPress: function (event) {
+	    if (event.key === "Enter") {
+	      UserUtil.fetchUserInfo(this.state.searchValue);
+	    }
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement('input', { className: 'search',
+	        type: 'text',
+	        onChange: this.valueChange,
+	        onKeyPress: this.keyPress,
+	        placeholder: 'search users',
+	        value: this.state.searchValue })
+	    );
+	  }
+	});
+	
+	module.exports = UserSearch;
+
+/***/ },
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -34735,18 +34911,19 @@
 	module.exports = Footer;
 
 /***/ },
-/* 277 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// FLUX
-	var RecipeStore = __webpack_require__(278);
-	var RecipeUtil = __webpack_require__(279);
+	var RecipeStore = __webpack_require__(284);
+	var SessionStore = __webpack_require__(235);
+	var RecipeUtil = __webpack_require__(262);
 	
 	// COMPONENTS
-	var Recipe = __webpack_require__(281);
-	var AddRecipeButton = __webpack_require__(282);
+	var Recipe = __webpack_require__(285);
+	var AddRecipeButton = __webpack_require__(289);
 	
 	var RecipeIndex = React.createClass({
 	  displayName: 'RecipeIndex',
@@ -34758,7 +34935,7 @@
 	  },
 	
 	  componentDidMount: function () {
-	    RecipeUtil.fetchUserRecipes(this.props.userId);
+	    fetchRecipes();
 	    this.recipeListener = RecipeStore.addListener(this.updateRecipes);
 	  },
 	
@@ -34798,10 +34975,18 @@
 	  }
 	});
 	
+	var fetchRecipes = function () {
+	  if (RecipeStore.recipes().length > 0) {
+	    return;
+	  } else {
+	    RecipeUtil.fetchUserRecipes(SessionStore.user().id);
+	  }
+	};
+	
 	module.exports = RecipeIndex;
 
 /***/ },
-/* 278 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(236).Store;
@@ -34842,82 +35027,14 @@
 	module.exports = RecipeStore;
 
 /***/ },
-/* 279 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	var RecipeActions = __webpack_require__(280);
-	
-	module.exports = {
-	  fetchUserRecipes: function (id) {
-	    if (id > 0) {
-	      $.ajax({
-	        url: 'api/users/' + id + '/recipes',
-	        method: 'GET',
-	        success: function (recipes) {
-	          RecipeActions.receiveRecipes(recipes);
-	        },
-	        error: function (error) {
-	          alert(error.responseText);
-	        }
-	      });
-	    }
-	  },
-	
-	  createRecipe: function (recipe) {
-	    var that = this;
-	    $.ajax({
-	      url: 'api/recipes',
-	      method: 'POST',
-	      data: recipe,
-	      success: function (response) {
-	        that.fetchUserRecipes(recipe.recipe.user_id);
-	      },
-	      error: function (error) {
-	        alert(error.responseText);
-	      }
-	    });
-	  },
-	
-	  deleteRecipe: function (id, userId) {
-	    var that = this;
-	    $.ajax({
-	      url: 'api/recipes/' + id,
-	      method: 'PATCH',
-	      success: function () {
-	        that.fetchUserRecipes(userId);
-	      },
-	      error: function (error) {
-	        alert(error.responseText);
-	      }
-	    });
-	  }
-	};
-
-/***/ },
-/* 280 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(254);
-	
-	module.exports = {
-	  receiveRecipes: function (recipes) {
-	    Dispatcher.dispatch({
-	      actionType: 'RECEIVE_RECIPES',
-	      recipes: recipes
-	    });
-	  }
-	};
-
-/***/ },
-/* 281 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// COMPONENTS
-	var MoreInfoButton = __webpack_require__(284);
-	var DeleteRecipeButton = __webpack_require__(286);
+	var MoreInfoButton = __webpack_require__(286);
+	var DeleteRecipeButton = __webpack_require__(288);
 	
 	var Recipe = React.createClass({
 	  displayName: 'Recipe',
@@ -34946,165 +35063,17 @@
 	module.exports = Recipe;
 
 /***/ },
-/* 282 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// COMPONENTS
-	var Modal = __webpack_require__(261);
-	var AddRecipeForm = __webpack_require__(283);
-	
-	// MODAL STYLES
-	var modalStyle = {
-	  transform: 'inherit',
-	  width: '300px',
-	  transform: 'translate(-50%, -50%)',
-	  border: '1px solid black',
-	  borderRadius: '3px'
-	};
-	
-	var backdropStyle = {
-	  backgroundColor: 'rgba(0, 0, 0, 0.2)'
-	};
-	
-	var contentStyle = {
-	  height: '100%',
-	  padding: '20px'
-	};
-	
-	var AddRecipeButton = React.createClass({
-	  displayName: 'AddRecipeButton',
-	
-	
-	  getInitialState: function () {
-	    return {
-	      open: false
-	    };
-	  },
-	
-	  showModal: function () {
-	    this.refs.modal.show();
-	    this.setState({ open: true });
-	  },
-	
-	  hideModal: function () {
-	    this.refs.modal.hide();
-	    this.setState({ open: false });
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'addRecipe flexRow' },
-	      React.createElement(
-	        'div',
-	        { className: 'button', onClick: this.showModal },
-	        'Add Recipe'
-	      ),
-	      React.createElement(
-	        Modal,
-	        { ref: 'modal',
-	          contentStyle: contentStyle,
-	          modalStyle: modalStyle,
-	          backdropStyle: backdropStyle },
-	        React.createElement(AddRecipeForm, { modalCallback: this.hideModal })
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = AddRecipeButton;
-
-/***/ },
-/* 283 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	// FLUX
-	var RecipeUtil = __webpack_require__(279);
-	var SessionStore = __webpack_require__(235);
-	
-	var AddRecipeForm = React.createClass({
-	  displayName: 'AddRecipeForm',
-	
-	
-	  getInitialState: function () {
-	    return {
-	      title: "",
-	      url: ""
-	    };
-	  },
-	
-	  titleChange: function (event) {
-	    event.preventDefault();
-	    this.setState({ title: event.currentTarget.value });
-	  },
-	
-	  urlChange: function (event) {
-	    event.preventDefault();
-	    this.setState({ url: event.currentTarget.value });
-	  },
-	
-	  createRecipe: function (event) {
-	    event.preventDefault();
-	    var url = makeSafeUrl(this.state.url);
-	    var recipe = {
-	      recipe: {
-	        title: this.state.title,
-	        url: url,
-	        user_id: SessionStore.user().id
-	      }
-	    };
-	    RecipeUtil.createRecipe(recipe);
-	    this.props.modalCallback();
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'addRecipe form' },
-	      React.createElement('input', { type: 'text', placeholder: 'title', value: this.state.title, onChange: this.titleChange }),
-	      React.createElement('input', { type: 'text', placeholder: 'url', value: this.state.url, onChange: this.urlChange }),
-	      React.createElement(
-	        'div',
-	        { className: 'button', onClick: this.createRecipe },
-	        'Add'
-	      )
-	    );
-	  }
-	});
-	
-	var makeSafeUrl = function (str) {
-	  var http = "http://";
-	  var https = "https:/";
-	  if (str.length > 7) {
-	    var prefix = str.slice(0, 7);
-	    if (prefix === http || prefix === https) {
-	      return str;
-	    } else {
-	      return http + str;
-	    }
-	  } else {
-	    return http + str;
-	  }
-	};
-	
-	module.exports = AddRecipeForm;
-
-/***/ },
-/* 284 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	// COMPONENTS
-	var RecipeInfo = __webpack_require__(285);
-	var Modal = __webpack_require__(261);
+	var RecipeInfo = __webpack_require__(287);
+	var Modal = __webpack_require__(265);
 	
 	// OBJECTS
-	var Urls = __webpack_require__(287);
+	var Urls = __webpack_require__(263);
 	
 	// MODAL STYLES
 	var modalStyle = {
@@ -35166,16 +35135,16 @@
 	module.exports = MoreInfoButton;
 
 /***/ },
-/* 285 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// FLUX
-	var RecipeStore = __webpack_require__(278);
+	var RecipeStore = __webpack_require__(284);
 	
 	// COMPONENTS
-	var DeleteRecipeButton = __webpack_require__(286);
+	var DeleteRecipeButton = __webpack_require__(288);
 	
 	var RecipeInfo = React.createClass({
 	  displayName: 'RecipeInfo',
@@ -35247,16 +35216,16 @@
 	module.exports = RecipeInfo;
 
 /***/ },
-/* 286 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
 	// OBJECTS
-	var Urls = __webpack_require__(287);
+	var Urls = __webpack_require__(263);
 	
 	// FLUX
-	var RecipeUtil = __webpack_require__(279);
+	var RecipeUtil = __webpack_require__(262);
 	var SessionStore = __webpack_require__(235);
 	
 	var DeleteRecipeButton = React.createClass({
@@ -35280,112 +35249,152 @@
 	module.exports = DeleteRecipeButton;
 
 /***/ },
-/* 287 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  noodleIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468874035/Noodle/noodle.png",
-	  trashIcon: "http://res.cloudinary.com/dzyfczxnr/image/upload/v1468875634/Noodle/trash.png"
-	};
-
-/***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
-	// FLUX
-	var UserUtil = __webpack_require__(274);
+	// COMPONENTS
+	var Modal = __webpack_require__(265);
+	var AddRecipeForm = __webpack_require__(290);
 	
-	var UserSearch = React.createClass({
-	  displayName: 'UserSearch',
+	// MODAL STYLES
+	var modalStyle = {
+	  transform: 'inherit',
+	  width: '300px',
+	  transform: 'translate(-50%, -50%)',
+	  border: '1px solid black',
+	  borderRadius: '3px'
+	};
+	
+	var backdropStyle = {
+	  backgroundColor: 'rgba(0, 0, 0, 0.2)'
+	};
+	
+	var contentStyle = {
+	  height: '100%',
+	  padding: '20px'
+	};
+	
+	var AddRecipeButton = React.createClass({
+	  displayName: 'AddRecipeButton',
 	
 	
 	  getInitialState: function () {
 	    return {
-	      searchValue: ""
+	      open: false
 	    };
 	  },
 	
-	  valueChange: function (event) {
-	    this.setState({ searchValue: event.currentTarget.value });
+	  showModal: function () {
+	    this.refs.modal.show();
+	    this.setState({ open: true });
 	  },
 	
-	  keyPress: function (event) {
-	    if (event.key === "Enter") {
-	      UserUtil.fetchUserInfo(this.state.searchValue);
-	    }
+	  hideModal: function () {
+	    this.refs.modal.hide();
+	    this.setState({ open: false });
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
-	      React.createElement('input', { className: 'search',
-	        type: 'text',
-	        onChange: this.valueChange,
-	        onKeyPress: this.keyPress,
-	        placeholder: 'search users',
-	        value: this.state.searchValue })
+	      { className: 'addRecipe flexRow' },
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.showModal },
+	        'Add Recipe'
+	      ),
+	      React.createElement(
+	        Modal,
+	        { ref: 'modal',
+	          contentStyle: contentStyle,
+	          modalStyle: modalStyle,
+	          backdropStyle: backdropStyle },
+	        React.createElement(AddRecipeForm, { modalCallback: this.hideModal })
+	      )
 	    );
 	  }
 	});
 	
-	module.exports = UserSearch;
-
-/***/ },
-/* 289 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(254);
-	
-	module.exports = {
-	  receiveUser: function (user) {
-	    Dispatcher.dispatch({
-	      actionType: 'RECEIVE_USER',
-	      user: user
-	    });
-	  }
-	};
+	module.exports = AddRecipeButton;
 
 /***/ },
 /* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(236).Store;
-	var Dispatcher = __webpack_require__(254);
+	var React = __webpack_require__(1);
 	
-	var UserStore = new Store(Dispatcher);
+	// FLUX
+	var RecipeUtil = __webpack_require__(262);
+	var SessionStore = __webpack_require__(235);
 	
-	var _user = {};
+	var AddRecipeForm = React.createClass({
+	  displayName: 'AddRecipeForm',
 	
-	UserStore.user = function () {
-	  return _user;
-	};
 	
-	UserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case 'RECEIVE_USER':
-	      resetUser(payload.user);
-	      UserStore.__emitChange();
-	      break;
+	  getInitialState: function () {
+	    return {
+	      title: "",
+	      url: ""
+	    };
+	  },
+	
+	  titleChange: function (event) {
+	    event.preventDefault();
+	    this.setState({ title: event.currentTarget.value });
+	  },
+	
+	  urlChange: function (event) {
+	    event.preventDefault();
+	    this.setState({ url: event.currentTarget.value });
+	  },
+	
+	  createRecipe: function (event) {
+	    event.preventDefault();
+	    var url = makeSafeUrl(this.state.url);
+	    var recipe = {
+	      recipe: {
+	        title: this.state.title,
+	        url: url,
+	        user_id: SessionStore.user().id
+	      }
+	    };
+	    RecipeUtil.createRecipe(recipe);
+	    this.props.modalCallback();
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'addRecipe form' },
+	      React.createElement('input', { type: 'text', placeholder: 'title', value: this.state.title, onChange: this.titleChange }),
+	      React.createElement('input', { type: 'text', placeholder: 'url', value: this.state.url, onChange: this.urlChange }),
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.createRecipe },
+	        'Add'
+	      )
+	    );
+	  }
+	});
+	
+	var makeSafeUrl = function (str) {
+	  var http = "http://";
+	  var https = "https:/";
+	  if (str.length > 7) {
+	    var prefix = str.slice(0, 7);
+	    if (prefix === http || prefix === https) {
+	      return str;
+	    } else {
+	      return http + str;
+	    }
+	  } else {
+	    return http + str;
 	  }
 	};
 	
-	var resetUser = function (user) {
-	  _user = user;
-	  localStorage['noodleSearch'] = JSON.stringify(user);
-	};
-	
-	var checkLocalStorage = function () {
-	  if (localStorage['noodleSearch']) {
-	    _user = JSON.parse(localStorage['noodleSearch']);
-	  }
-	};
-	
-	checkLocalStorage();
-	
-	module.exports = UserStore;
+	module.exports = AddRecipeForm;
 
 /***/ }
 /******/ ]);
