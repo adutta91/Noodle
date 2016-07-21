@@ -2,6 +2,7 @@ var React = require('react');
 
 // FLUX
 var SessionStore = require('../../stores/sessionStore');
+var UserUtil = require('../../utils/userUtil');
 
 var ProfileButton = React.createClass({
 
@@ -25,7 +26,7 @@ var ProfileButton = React.createClass({
 
   profileClicked: function(event) {
     event.preventDefault();
-    alert('to be made');
+    UserUtil.fetchUserInfo(SessionStore.user().username);
   },
 
   getUsername: function() {

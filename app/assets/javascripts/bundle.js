@@ -34798,6 +34798,7 @@
 	
 	// FLUX
 	var SessionStore = __webpack_require__(235);
+	var UserUtil = __webpack_require__(278);
 	
 	var ProfileButton = React.createClass({
 	  displayName: 'ProfileButton',
@@ -34823,7 +34824,7 @@
 	
 	  profileClicked: function (event) {
 	    event.preventDefault();
-	    alert('to be made');
+	    UserUtil.fetchUserInfo(SessionStore.user().username);
 	  },
 	
 	  getUsername: function () {
