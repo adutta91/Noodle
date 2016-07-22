@@ -4,12 +4,16 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     resource :session, only: [:create, :destroy]
 
-    resource :users, only: [:create]
+    resources :users, only: [:create]
     get '/users/:id/recipes', to: 'users#recipes'
     get '/users/:username', to: 'users#search_user'
+    get '/users/:id/recipe_likes', to: 'users#recipe_likes'
 
-    resource :recipes, only: [:create, :show]
+    resources :recipes, only: [:create, :show]
     patch '/recipes/:id', to: 'recipes#destroy'
+
+    resources :recipe_likes, only: [:create]
+    patch '/recipe_likes/:id', to: 'recipe_likes#destroy'
 
   end
 

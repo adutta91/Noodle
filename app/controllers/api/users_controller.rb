@@ -31,6 +31,11 @@ class Api::UsersController < ApplicationController
     render :show_recipes
   end
 
+  def recipe_likes
+    @user = find_user
+    render :show_recipe_likes
+  end
+
   def search_user
     @user = User.find_by_username(params[:username])
   end

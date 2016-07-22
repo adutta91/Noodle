@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
 
   # associations
   has_many :recipes
+  has_many :recipe_likes
 
   # password methods
   def password=(password)

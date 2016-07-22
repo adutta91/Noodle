@@ -58,3 +58,9 @@ recipe.url = 'http://www.facebook.com'
 recipe.user_id = 2
 recipe.description = "grandpa's fudge - best thing ever"
 recipe.save!
+
+
+recipe_like = RecipeLike.new
+recipe_like.user_id = 1
+recipe_like.recipe_id = 4
+recipe_like.save!
