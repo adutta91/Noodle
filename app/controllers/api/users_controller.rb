@@ -33,7 +33,7 @@ class Api::UsersController < ApplicationController
 
   def recipe_likes
     @user = find_user
-    render :show_recipe_likes
+    render :show_liked_recipes
   end
 
   def search_user

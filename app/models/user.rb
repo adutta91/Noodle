@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
   has_many :recipes
   has_many :recipe_likes
 
+  has_many :liked_recipes,
+    through: :recipe_likes,
+    source: :recipe
+
   # password methods
   def password=(password)
     @password = password

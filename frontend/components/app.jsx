@@ -11,6 +11,8 @@ var UserStore = require('../stores/userStore');
 var Header = require('./header/header');
 var Footer = require('./footer/footer');
 var RecipeIndex = require('./recipes/recipeIndex');
+var LikedRecipeIndex = require('./recipes/likedRecipeIndex');
+var AddRecipeButton = require('./recipes/addRecipeButton');
 
 var App = React.createClass({
 
@@ -46,11 +48,17 @@ var App = React.createClass({
 
   welcome: function() {
     if (this.state.loggedIn && this.state.user.id === SessionStore.user().id) {
-      return "Welcome, " + this.state.user.username + "!";
+      return (
+        <h3>Welcome, {this.state.user.username}!</h3>
+      );
     } else if (!this.state.loggedIn) {
-      return "Login to create and save recipes!"
+      return (
+        <h6>Login to create and save recipes!</h6>
+      )
     } else {
-      return "~ " + this.state.user.username + "'s recipes ~"
+      return (
+        <h3>{this.state.user.username}'s recipes</h3>
+      )
     }
   },
 
@@ -62,13 +70,34 @@ var App = React.createClass({
     }
   },
 
+  displayRecipeIndices: function() {
+    if (SessionStore.user().id === UserStore.user().id) {
+      return (
+        <div>
+          <h4>Saved Recipes</h4>
+          <RecipeIndex />
+          <h4>Liked Recipes</h4>
+          <LikedRecipeIndex />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h4>Saved Recipes</h4>
+          <RecipeIndex />
+        </div>
+      )
+    }
+  },
+
   render: function() {
     return (
       <div className="flexColumn">
         <Header loggedIn={this.state.loggedIn}/>
         <div className="app">
+          <AddRecipeButton />
           { this.welcome() }
-          <RecipeIndex />
+          { this.displayRecipeIndices() }
         </div>
         <Footer />
       </div>

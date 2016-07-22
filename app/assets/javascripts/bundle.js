@@ -21103,6 +21103,8 @@
 	var Header = __webpack_require__(258);
 	var Footer = __webpack_require__(282);
 	var RecipeIndex = __webpack_require__(283);
+	var LikedRecipeIndex = __webpack_require__(291);
+	var AddRecipeButton = __webpack_require__(289);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -21140,11 +21142,26 @@
 	
 	  welcome: function () {
 	    if (this.state.loggedIn && this.state.user.id === SessionStore.user().id) {
-	      return "Welcome, " + this.state.user.username + "!";
+	      return React.createElement(
+	        'h3',
+	        null,
+	        'Welcome, ',
+	        this.state.user.username,
+	        '!'
+	      );
 	    } else if (!this.state.loggedIn) {
-	      return "Login to create and save recipes!";
+	      return React.createElement(
+	        'h6',
+	        null,
+	        'Login to create and save recipes!'
+	      );
 	    } else {
-	      return "~ " + this.state.user.username + "'s recipes ~";
+	      return React.createElement(
+	        'h3',
+	        null,
+	        this.state.user.username,
+	        '\'s recipes'
+	      );
 	    }
 	  },
 	
@@ -21156,6 +21173,38 @@
 	    }
 	  },
 	
+	  displayRecipeIndices: function () {
+	    if (SessionStore.user().id === UserStore.user().id) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'h4',
+	          null,
+	          'Saved Recipes'
+	        ),
+	        React.createElement(RecipeIndex, null),
+	        React.createElement(
+	          'h4',
+	          null,
+	          'Liked Recipes'
+	        ),
+	        React.createElement(LikedRecipeIndex, null)
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'h4',
+	          null,
+	          'Saved Recipes'
+	        ),
+	        React.createElement(RecipeIndex, null)
+	      );
+	    }
+	  },
+	
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -21164,8 +21213,9 @@
 	      React.createElement(
 	        'div',
 	        { className: 'app' },
+	        React.createElement(AddRecipeButton, null),
 	        this.welcome(),
-	        React.createElement(RecipeIndex, null)
+	        this.displayRecipeIndices()
 	      ),
 	      React.createElement(Footer, null)
 	    );
@@ -34925,7 +34975,6 @@
 	
 	// COMPONENTS
 	var Recipe = __webpack_require__(285);
-	var AddRecipeButton = __webpack_require__(289);
 	
 	var RecipeIndex = React.createClass({
 	  displayName: 'RecipeIndex',
@@ -34966,13 +35015,8 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'recipeList flexRow' },
-	        this.displayRecipes()
-	      ),
-	      React.createElement(AddRecipeButton, null)
+	      { className: 'recipeList flexRow' },
+	      this.displayRecipes()
 	    );
 	  }
 	});
@@ -35397,6 +35441,127 @@
 	};
 	
 	module.exports = AddRecipeForm;
+
+/***/ },
+/* 291 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	// FLUX
+	var LikedRecipeStore = __webpack_require__(292);
+	var LikedRecipeUtil = __webpack_require__(293);
+	var SessionStore = __webpack_require__(235);
+	
+	// COMPONENTS
+	var Recipe = __webpack_require__(285);
+	
+	var LikedRecipeIndex = React.createClass({
+	  displayName: 'LikedRecipeIndex',
+	
+	
+	  getInitialState: function () {
+	    return {
+	      recipes: LikedRecipeStore.recipes()
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.recipeListener = LikedRecipeStore.addListener(this.update);
+	    LikedRecipeUtil.fetchLikedRecipes(SessionStore.user().id);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.recipeListener.remove();
+	  },
+	
+	  update: function () {
+	    this.setState({ recipes: LikedRecipeStore.recipes() });
+	  },
+	
+	  displayRecipes: function () {
+	    return this.state.recipes.map(function (recipe) {
+	      return React.createElement(Recipe, { key: recipe.id, recipe: recipe });
+	    });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'recipeList flexRow' },
+	      this.displayRecipes()
+	    );
+	  }
+	});
+	
+	module.exports = LikedRecipeIndex;
+
+/***/ },
+/* 292 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(236).Store;
+	var Dispatcher = __webpack_require__(254);
+	
+	var LikedRecipeStore = new Store(Dispatcher);
+	
+	var _recipes = [];
+	
+	LikedRecipeStore.recipes = function () {
+	  return _recipes;
+	};
+	
+	LikedRecipeStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case 'RECEIVE_LIKED_RECIPES':
+	      resetRecipes(payload.recipes);
+	      LikedRecipeStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	var resetRecipes = function (recipes) {
+	  _recipes = recipes;
+	};
+	
+	module.exports = LikedRecipeStore;
+
+/***/ },
+/* 293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	var LikedRecipeActions = __webpack_require__(294);
+	
+	module.exports = {
+	  fetchLikedRecipes: function (userId) {
+	    $.ajax({
+	      url: 'api/users/' + userId + "/recipe_likes",
+	      method: 'GET',
+	      success: function (recipes) {
+	        LikedRecipeActions.receiveRecipes(recipes);
+	      },
+	      error: function (error) {
+	        alert(error.responseText);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(254);
+	
+	module.exports = {
+	  receiveRecipes: function (recipes) {
+	    Dispatcher.dispatch({
+	      actionType: 'RECEIVE_LIKED_RECIPES',
+	      recipes: recipes
+	    });
+	  }
+	};
 
 /***/ }
 /******/ ]);

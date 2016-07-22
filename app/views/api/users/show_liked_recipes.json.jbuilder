@@ -1,4 +1,4 @@
-json.array! (@user.recipe_likes) do |recipe|
+json.array! (@user.liked_recipes) do |recipe|
   json.title recipe.title
   json.url recipe.url
   json.id recipe.id
