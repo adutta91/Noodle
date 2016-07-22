@@ -1,8 +1,11 @@
 // FLUX
 var SessionActions = require('../actions/sessionActions');
 var RecipeActions = require('../actions/recipeActions');
+var LikedRecipeActions = require('../actions/likedRecipeActions');
+var UserActions = require('../actions/userActions');
 
 var RecipeUtil = require('./recipeUtil');
+var LikedRecipeUtil = require('./likedRecipeUtil');
 
 module.exports = {
   loginUser: function(user) {
@@ -12,7 +15,8 @@ module.exports = {
       data: user,
       success: function(user) {
         SessionActions.loginUser(user);
-        RecipeUtil.fetchUserRecipes(user.id);
+        RecipeActions.receiveRecipes(user.id);
+        LikedRecipeUtil.fetchLikedRecipes(user.id);
       },
       error: function(error) {
         alert('session start error')
@@ -27,7 +31,9 @@ module.exports = {
       data: id,
       success: function(response) {
         SessionActions.logoutUser();
-        RecipeActions.receiveRecipes([]);
+        RecipeActions.clearRecipes();
+        LikedRecipeActions.clearLikedRecipes();
+        UserActions.clearUser();
       },
       error: function(error) {
         alert('session end error');

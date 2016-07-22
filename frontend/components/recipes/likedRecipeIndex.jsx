@@ -38,8 +38,11 @@ var LikedRecipeIndex = React.createClass({
 
   render: function() {
     return (
-      <div className="recipeList flexRow">
-        { this.displayRecipes() }
+      <div className="flexColumn">
+        <h4>Liked Recipes</h4>
+        <div className="recipeList flexRow">
+          { this.displayRecipes() }
+        </div>
       </div>
     )
   }

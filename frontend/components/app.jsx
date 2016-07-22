@@ -64,11 +64,7 @@ var App = React.createClass({
       return (
         <h3>Welcome, {this.state.user.username}!</h3>
       );
-    } else if (!this.state.loggedIn) {
-      return (
-        <h6>Login to create and save recipes!</h6>
-      )
-    } else {
+    } else if (this.state.recipes.length > 0){
       return (
         <h3>{this.state.user.username}'s recipes</h3>
       )
@@ -84,21 +80,26 @@ var App = React.createClass({
   },
 
   displayRecipeIndices: function() {
-    if (UserStore.user().id === SessionStore.user().id) {
+    if (!this.state.loggedIn || UserStore.user().id !== SessionStore.user().id) {
       return (
         <div>
-          <h4>Saved Recipes</h4>
           <RecipeIndex />
-          <h4>Liked Recipes</h4>
+        </div>
+      )
+    } else if ((this.state.loggedIn && UserStore.user().id === SessionStore.user().id)) {
+      return (
+        <div className="flexColumn">
+          <RecipeIndex />
           <LikedRecipeIndex />
         </div>
       );
-    } else {
+    }
+  },
+
+  displayButtons: function() {
+    if (this.state.loggedIn) {
       return (
-        <div>
-          <h4>Saved Recipes</h4>
-          <RecipeIndex />
-        </div>
+        <AddRecipeButton />
       )
     }
   },
@@ -108,10 +109,10 @@ var App = React.createClass({
       <div className="flexColumn">
         <Header loggedIn={this.state.loggedIn}/>
         <div className="app">
-          <AddRecipeButton />
           { this.welcome() }
           { this.displayRecipeIndices() }
         </div>
+        { this.displayButtons() }
         <Footer />
       </div>
     )

@@ -21162,13 +21162,7 @@
 	        this.state.user.username,
 	        '!'
 	      );
-	    } else if (!this.state.loggedIn) {
-	      return React.createElement(
-	        'h6',
-	        null,
-	        'Login to create and save recipes!'
-	      );
-	    } else {
+	    } else if (this.state.recipes.length > 0) {
 	      return React.createElement(
 	        'h3',
 	        null,
@@ -21187,34 +21181,25 @@
 	  },
 	
 	  displayRecipeIndices: function () {
-	    if (UserStore.user().id === SessionStore.user().id) {
+	    if (!this.state.loggedIn || UserStore.user().id !== SessionStore.user().id) {
 	      return React.createElement(
 	        'div',
 	        null,
-	        React.createElement(
-	          'h4',
-	          null,
-	          'Saved Recipes'
-	        ),
-	        React.createElement(RecipeIndex, null),
-	        React.createElement(
-	          'h4',
-	          null,
-	          'Liked Recipes'
-	        ),
-	        React.createElement(LikedRecipeIndex, null)
-	      );
-	    } else {
-	      return React.createElement(
-	        'div',
-	        null,
-	        React.createElement(
-	          'h4',
-	          null,
-	          'Saved Recipes'
-	        ),
 	        React.createElement(RecipeIndex, null)
 	      );
+	    } else if (this.state.loggedIn && UserStore.user().id === SessionStore.user().id) {
+	      return React.createElement(
+	        'div',
+	        { className: 'flexColumn' },
+	        React.createElement(RecipeIndex, null),
+	        React.createElement(LikedRecipeIndex, null)
+	      );
+	    }
+	  },
+	
+	  displayButtons: function () {
+	    if (this.state.loggedIn) {
+	      return React.createElement(AddRecipeButton, null);
 	    }
 	  },
 	
@@ -21226,10 +21211,10 @@
 	      React.createElement(
 	        'div',
 	        { className: 'app' },
-	        React.createElement(AddRecipeButton, null),
 	        this.welcome(),
 	        this.displayRecipeIndices()
 	      ),
+	      this.displayButtons(),
 	      React.createElement(Footer, null)
 	    );
 	  }
@@ -26798,7 +26783,7 @@
 	var Store = __webpack_require__(236).Store;
 	var Dispatcher = __webpack_require__(254);
 	
-	var _loggedInUser = null;
+	var _loggedInUser = { id: -1 };
 	var _loggedIn = false;
 	
 	var SessionStore = new Store(Dispatcher);
@@ -33619,6 +33604,7 @@
 	var UserStore = new Store(Dispatcher);
 	
 	var _user = {};
+	var _userSearched = false;
 	
 	UserStore.user = function () {
 	  return _user;
@@ -33630,12 +33616,23 @@
 	      resetUser(payload.user);
 	      UserStore.__emitChange();
 	      break;
+	    case 'CLEAR_USER':
+	      clearUser();
+	      UserStore.__emitChange();
+	      break;
 	  }
 	};
 	
 	var resetUser = function (user) {
 	  _user = user;
+	  _userSearched = true;
 	  localStorage['noodleSearch'] = JSON.stringify(user);
+	};
+	
+	var clearUser = function () {
+	  _user = {};
+	  _userSearched = false;
+	  localStorage.removeItem('noodleSearch');
 	};
 	
 	var checkLocalStorage = function () {
@@ -33733,8 +33730,11 @@
 	// FLUX
 	var SessionActions = __webpack_require__(260);
 	var RecipeActions = __webpack_require__(261);
+	var LikedRecipeActions = __webpack_require__(294);
+	var UserActions = __webpack_require__(279);
 	
 	var RecipeUtil = __webpack_require__(262);
+	var LikedRecipeUtil = __webpack_require__(293);
 	
 	module.exports = {
 	  loginUser: function (user) {
@@ -33744,7 +33744,8 @@
 	      data: user,
 	      success: function (user) {
 	        SessionActions.loginUser(user);
-	        RecipeUtil.fetchUserRecipes(user.id);
+	        RecipeActions.receiveRecipes(user.id);
+	        LikedRecipeUtil.fetchLikedRecipes(user.id);
 	      },
 	      error: function (error) {
 	        alert('session start error');
@@ -33759,7 +33760,9 @@
 	      data: id,
 	      success: function (response) {
 	        SessionActions.logoutUser();
-	        RecipeActions.receiveRecipes([]);
+	        RecipeActions.clearRecipes();
+	        LikedRecipeActions.clearLikedRecipes();
+	        UserActions.clearUser();
 	      },
 	      error: function (error) {
 	        alert('session end error');
@@ -33800,6 +33803,12 @@
 	    Dispatcher.dispatch({
 	      actionType: 'RECEIVE_RECIPES',
 	      recipes: recipes
+	    });
+	  },
+	
+	  clearRecipes: function () {
+	    Dispatcher.dispatch({
+	      actionType: 'CLEAR_RECIPES'
 	    });
 	  }
 	};
@@ -34850,6 +34859,12 @@
 	      actionType: 'RECEIVE_USER',
 	      user: user
 	    });
+	  },
+	
+	  clearUser: function () {
+	    Dispatcher.dispatch({
+	      actionType: 'CLEAR_USER'
+	    });
 	  }
 	};
 
@@ -34937,7 +34952,7 @@
 	  keyPress: function (event) {
 	    if (event.key === "Enter") {
 	      UserUtil.fetchUserInfo(this.state.searchValue);
-	      if (this.state.searchValue !== SessionStore.user().username) {
+	      if (SessionStore.user() && this.state.searchValue !== SessionStore.user().username) {
 	        LikedRecipeUtil.resetLikedRecipes();
 	      }
 	      this.setState({ searchValue: "" });
@@ -35022,19 +35037,36 @@
 	        return React.createElement(Recipe, { displayUser: false, key: recipe.id, recipe: recipe });
 	      });
 	    } else {
-	      return React.createElement(
-	        'div',
-	        null,
-	        'You don\'t have any recipes! Make one below'
-	      );
+	      if (SessionStore.loggedIn()) {
+	        return React.createElement(
+	          'div',
+	          null,
+	          'You don\'t have any recipes! Make one below'
+	        );
+	      } else {
+	        return React.createElement(
+	          'div',
+	          null,
+	          'You don\'t have any recipes! Login to make one'
+	        );
+	      }
 	    }
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'recipeList flexRow' },
-	      this.displayRecipes()
+	      { className: 'flexColumn' },
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Saved Recipes'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'recipeList flexRow' },
+	        this.displayRecipes()
+	      )
 	    );
 	  }
 	});
@@ -35066,6 +35098,10 @@
 	      resetRecipes(payload.recipes);
 	      RecipeStore.__emitChange();
 	      break;
+	    case 'CLEAR_RECIPES':
+	      clearRecipes();
+	      RecipeStore.__emitChange();
+	      break;
 	  }
 	};
 	
@@ -35086,7 +35122,17 @@
 	
 	var resetRecipes = function (recipes) {
 	  _recipes = recipes;
+	  localStorage['noodleRecipes'] = JSON.stringify(recipes);
 	};
+	
+	var checkLocalStorage = function () {
+	  var recipes = localStorage['noodleRecipes'];
+	  if (recipes) {
+	    _recipes = JSON.parse(recipes);
+	  }
+	};
+	
+	checkLocalStorage();
 	
 	module.exports = RecipeStore;
 
@@ -35518,8 +35564,17 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'recipeList flexRow' },
-	      this.displayRecipes()
+	      { className: 'flexColumn' },
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Liked Recipes'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'recipeList flexRow' },
+	        this.displayRecipes()
+	      )
 	    );
 	  }
 	});
@@ -35547,12 +35602,31 @@
 	      resetRecipes(payload.recipes);
 	      LikedRecipeStore.__emitChange();
 	      break;
+	    case 'CLEAR_LIKED_RECIPES':
+	      clearRecipes();
+	      LikedRecipeStore.__emitChange();
+	      break;
 	  }
+	};
+	
+	var clearRecipes = function () {
+	  _recipes = [];
+	  localStorage.removeItem('noodleLikedRecipes');
 	};
 	
 	var resetRecipes = function (recipes) {
 	  _recipes = recipes;
+	  localStorage['noodleLikedRecipes'] = JSON.stringify(recipes);
 	};
+	
+	var checkLocalStorage = function () {
+	  var recipes = localStorage['noodleLikedRecipes'];
+	  if (recipes) {
+	    _recipes = JSON.parse(recipes);
+	  }
+	};
+	
+	checkLocalStorage();
 	
 	module.exports = LikedRecipeStore;
 
@@ -35593,6 +35667,12 @@
 	    Dispatcher.dispatch({
 	      actionType: 'RECEIVE_LIKED_RECIPES',
 	      recipes: recipes
+	    });
+	  },
+	
+	  clearLikedRecipes: function () {
+	    Dispatcher.dispatch({
+	      actionType: 'CLEAR_LIKED_RECIPES'
 	    });
 	  }
 	};

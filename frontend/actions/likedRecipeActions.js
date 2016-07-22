@@ -6,5 +6,11 @@ module.exports = {
       actionType: 'RECEIVE_LIKED_RECIPES',
       recipes: recipes
     });
+  },
+
+  clearLikedRecipes: function() {
+    Dispatcher.dispatch({
+      actionType: 'CLEAR_LIKED_RECIPES'
+    })
   }
 }

@@ -11,6 +11,10 @@ RecipeStore.__onDispatch = function(payload) {
       resetRecipes(payload.recipes);
       RecipeStore.__emitChange();
       break;
+    case 'CLEAR_RECIPES':
+      clearRecipes();
+      RecipeStore.__emitChange();
+      break;
   }
 };
 
@@ -31,7 +35,16 @@ RecipeStore.findById = function(id) {
 
 var resetRecipes = function(recipes) {
   _recipes = recipes;
+  localStorage['noodleRecipes'] = JSON.stringify(recipes);
 };
 
+var checkLocalStorage = function() {
+  var recipes = localStorage['noodleRecipes'];
+  if (recipes) {
+    _recipes = JSON.parse(recipes);
+  }
+};
+
+checkLocalStorage();
 
 module.exports = RecipeStore;

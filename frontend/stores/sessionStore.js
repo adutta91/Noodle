@@ -1,7 +1,7 @@
 var Store = require('flux/utils').Store;
 var Dispatcher = require('../dispatcher');
 
-var _loggedInUser = null;
+var _loggedInUser = {id: -1};
 var _loggedIn = false;
 
 var SessionStore = new Store(Dispatcher);

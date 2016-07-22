@@ -6,5 +6,11 @@ module.exports = {
       actionType: 'RECEIVE_RECIPES',
       recipes: recipes
     });
+  },
+
+  clearRecipes: function() {
+    Dispatcher.dispatch({
+      actionType: 'CLEAR_RECIPES'
+    })
   }
 }

@@ -6,5 +6,11 @@ module.exports = {
       actionType: 'RECEIVE_USER',
       user: user
     });
+  },
+
+  clearUser: function() {
+    Dispatcher.dispatch({
+      actionType: 'CLEAR_USER'
+    });
   }
 }

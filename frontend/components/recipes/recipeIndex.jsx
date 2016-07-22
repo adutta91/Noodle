@@ -36,16 +36,25 @@ var RecipeIndex = React.createClass({
         )
       });
     } else {
-      return (
-        <div>You don't have any recipes! Make one below</div>
-      )
+      if (SessionStore.loggedIn()) {
+        return (
+          <div>You don't have any recipes! Make one below</div>
+        )
+      } else {
+        return (
+          <div>You don't have any recipes! Login to make one</div>
+        )
+      }
     }
   },
 
   render: function() {
     return (
-      <div className="recipeList flexRow">
-        {this.displayRecipes()}
+      <div className="flexColumn">
+        <h4>Saved Recipes</h4>
+        <div className="recipeList flexRow">
+          {this.displayRecipes()}
+        </div>
       </div>
     )
   }
