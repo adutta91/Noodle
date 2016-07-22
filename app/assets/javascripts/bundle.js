@@ -21098,6 +21098,8 @@
 	// FLUX
 	var SessionStore = __webpack_require__(235);
 	var UserStore = __webpack_require__(257);
+	var RecipeStore = __webpack_require__(284);
+	var LikedRecipeStore = __webpack_require__(292);
 	
 	// COMPONENTS
 	var Header = __webpack_require__(258);
@@ -21113,30 +21115,41 @@
 	  getInitialState: function () {
 	    return {
 	      loggedIn: SessionStore.loggedIn(),
-	      user: SessionStore.user()
+	      user: SessionStore.user(),
+	      recipes: RecipeStore.recipes(),
+	      likedRecipes: LikedRecipeStore.recipes()
 	    };
 	  },
 	
 	  componentDidMount: function () {
-	    this.sessionListener = SessionStore.addListener(this.sessionUpdate);
-	    this.userListener = UserStore.addListener(this.userUpdate);
+	    this.sessionListener = SessionStore.addListener(this.updateSession);
+	    this.userListener = UserStore.addListener(this.updateUser);
+	    this.recipeListener = RecipeStore.addListener(this.updateRecipes);
+	    this.likedRecipeListener = LikedRecipeStore.addListener(this.updateRecipes);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.sessionListener.remove();
 	    this.userListener.remove();
+	    this.recipeListener.remove();
+	    this.likedRecipeListener.remove();
 	  },
 	
-	  sessionUpdate: function () {
+	  updateSession: function () {
 	    this.setState({
 	      loggedIn: SessionStore.loggedIn(),
 	      user: SessionStore.user()
 	    });
 	  },
 	
-	  userUpdate: function () {
+	  updateUser: function () {
+	    this.setState({ user: UserStore.user() });
+	  },
+	
+	  updateRecipes: function () {
 	    this.setState({
-	      user: UserStore.user()
+	      recipes: RecipeStore.recipes(),
+	      likedRecipes: LikedRecipeStore.recipes()
 	    });
 	  },
 	
@@ -21174,7 +21187,7 @@
 	  },
 	
 	  displayRecipeIndices: function () {
-	    if (UserStore.user().id) {
+	    if (UserStore.user().id === SessionStore.user().id) {
 	      return React.createElement(
 	        'div',
 	        null,
@@ -34904,6 +34917,8 @@
 	
 	// FLUX
 	var UserUtil = __webpack_require__(278);
+	var LikedRecipeUtil = __webpack_require__(293);
+	var SessionStore = __webpack_require__(235);
 	
 	var UserSearch = React.createClass({
 	  displayName: 'UserSearch',
@@ -34922,6 +34937,9 @@
 	  keyPress: function (event) {
 	    if (event.key === "Enter") {
 	      UserUtil.fetchUserInfo(this.state.searchValue);
+	      if (this.state.searchValue !== SessionStore.user().username) {
+	        LikedRecipeUtil.resetLikedRecipes();
+	      }
 	      this.setState({ searchValue: "" });
 	    }
 	  },
@@ -35557,6 +35575,10 @@
 	        alert(error.responseText);
 	      }
 	    });
+	  },
+	
+	  resetLikedRecipes: function () {
+	    LikedRecipeActions.receiveRecipes([]);
 	  }
 	};
 

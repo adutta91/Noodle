@@ -13,5 +13,9 @@ module.exports = {
         alert(error.responseText);
       }
     });
+  },
+
+  resetLikedRecipes: function() {
+    LikedRecipeActions.receiveRecipes([]);
   }
 }

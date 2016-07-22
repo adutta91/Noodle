@@ -6,6 +6,8 @@ var HashHistory = require('react-router').hashHistory;
 // FLUX
 var SessionStore = require('../stores/sessionStore');
 var UserStore = require('../stores/userStore');
+var RecipeStore = require('../stores/recipeStore');
+var LikedRecipeStore = require('../stores/likedRecipeStore');
 
 // COMPONENTS
 var Header = require('./header/header');
@@ -19,31 +21,42 @@ var App = React.createClass({
   getInitialState: function() {
     return ({
       loggedIn: SessionStore.loggedIn(),
-      user: SessionStore.user()
+      user: SessionStore.user(),
+      recipes: RecipeStore.recipes(),
+      likedRecipes: LikedRecipeStore.recipes()
     });
   },
 
   componentDidMount: function() {
-    this.sessionListener = SessionStore.addListener(this.sessionUpdate);
-    this.userListener = UserStore.addListener(this.userUpdate);
+    this.sessionListener = SessionStore.addListener(this.updateSession);
+    this.userListener = UserStore.addListener(this.updateUser);
+    this.recipeListener = RecipeStore.addListener(this.updateRecipes);
+    this.likedRecipeListener = LikedRecipeStore.addListener(this.updateRecipes);
   },
 
   componentWillUnmount: function() {
     this.sessionListener.remove();
     this.userListener.remove();
+    this.recipeListener.remove();
+    this.likedRecipeListener.remove();
   },
 
-  sessionUpdate: function() {
+  updateSession: function() {
     this.setState({
       loggedIn: SessionStore.loggedIn(),
       user: SessionStore.user()
     });
   },
 
-  userUpdate: function() {
+  updateUser: function() {
+    this.setState({ user: UserStore.user() });
+  },
+
+  updateRecipes: function() {
     this.setState({
-      user: UserStore.user()
-    });
+      recipes: RecipeStore.recipes(),
+      likedRecipes: LikedRecipeStore.recipes()
+    })
   },
 
   welcome: function() {
@@ -71,7 +84,7 @@ var App = React.createClass({
   },
 
   displayRecipeIndices: function() {
-    if (UserStore.user().id) {
+    if (UserStore.user().id === SessionStore.user().id) {
       return (
         <div>
           <h4>Saved Recipes</h4>

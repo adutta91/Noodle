@@ -2,6 +2,8 @@ var React = require('react');
 
 // FLUX
 var UserUtil = require('../../utils/userUtil');
+var LikedRecipeUtil = require('../../utils/likedRecipeUtil');
+var SessionStore = require('../../stores/sessionStore');
 
 var UserSearch = React.createClass({
 
@@ -18,6 +20,9 @@ var UserSearch = React.createClass({
   keyPress: function(event) {
     if (event.key === "Enter") {
       UserUtil.fetchUserInfo(this.state.searchValue);
+      if (this.state.searchValue !== SessionStore.user().username) {
+        LikedRecipeUtil.resetLikedRecipes();
+      }
       this.setState({ searchValue: "" });
     }
   },
