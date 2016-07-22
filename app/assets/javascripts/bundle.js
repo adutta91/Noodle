@@ -21162,21 +21162,6 @@
 	        this.state.user.username,
 	        '!'
 	      );
-	    } else if (this.state.recipes.length > 0) {
-	      return React.createElement(
-	        'h3',
-	        null,
-	        this.state.user.username,
-	        '\'s recipes'
-	      );
-	    }
-	  },
-	
-	  getUserId: function () {
-	    if (this.state.user) {
-	      return this.state.user.id;
-	    } else {
-	      return -1;
 	    }
 	  },
 	
@@ -33610,6 +33595,10 @@
 	  return _user;
 	};
 	
+	UserStore.userSearched = function () {
+	  return _userSearched;
+	};
+	
 	UserStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case 'RECEIVE_USER':
@@ -33626,18 +33615,19 @@
 	var resetUser = function (user) {
 	  _user = user;
 	  _userSearched = true;
-	  localStorage['noodleSearch'] = JSON.stringify(user);
+	  localStorage['noodleUserSearch'] = JSON.stringify(user);
 	};
 	
 	var clearUser = function () {
 	  _user = {};
 	  _userSearched = false;
-	  localStorage.removeItem('noodleSearch');
+	  localStorage.removeItem('noodleUserSearch');
 	};
 	
 	var checkLocalStorage = function () {
-	  if (localStorage['noodleSearch']) {
-	    _user = JSON.parse(localStorage['noodleSearch']);
+	  if (localStorage['noodleUserSearch']) {
+	    _user = JSON.parse(localStorage['noodleUserSearch']);
+	    _userSearched = true;
 	  }
 	};
 	
@@ -33744,7 +33734,8 @@
 	      data: user,
 	      success: function (user) {
 	        SessionActions.loginUser(user);
-	        RecipeActions.receiveRecipes(user.id);
+	        UserActions.receiveUser(user);
+	        RecipeUtil.fetchUserRecipes(user.id);
 	        LikedRecipeUtil.fetchLikedRecipes(user.id);
 	      },
 	      error: function (error) {
@@ -35053,15 +35044,29 @@
 	    }
 	  },
 	
+	  displayTitle: function () {
+	    var firstRecipe = this.state.recipes[0];
+	    if (SessionStore.loggedIn() && firstRecipe.user_id === SessionStore.user().id) {
+	      return React.createElement(
+	        'h4',
+	        null,
+	        'Your saved recipes'
+	      );
+	    } else {
+	      return React.createElement(
+	        'h4',
+	        null,
+	        firstRecipe.user_username,
+	        '\'s saved recipes'
+	      );
+	    }
+	  },
+	
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      { className: 'flexColumn' },
-	      React.createElement(
-	        'h4',
-	        null,
-	        'Saved Recipes'
-	      ),
+	      this.displayTitle(),
 	      React.createElement(
 	        'div',
 	        { className: 'recipeList flexRow' },
@@ -35120,6 +35125,11 @@
 	  return target;
 	};
 	
+	var clearRecipes = function () {
+	  _recipes = [];
+	  localStorage.removeItem('noodleRecipes');
+	};
+	
 	var resetRecipes = function (recipes) {
 	  _recipes = recipes;
 	  localStorage['noodleRecipes'] = JSON.stringify(recipes);
@@ -35142,6 +35152,9 @@
 
 	var React = __webpack_require__(1);
 	
+	// FLUX
+	var SessionStore = __webpack_require__(235);
+	
 	// COMPONENTS
 	var MoreInfoButton = __webpack_require__(286);
 	var DeleteRecipeButton = __webpack_require__(288);
@@ -35160,7 +35173,7 @@
 	  },
 	
 	  displayUser: function () {
-	    if (this.props.displayUser) {
+	    if (!SessionStore.loggedIn() || this.props.displayUser) {
 	      return React.createElement(
 	        'h5',
 	        null,

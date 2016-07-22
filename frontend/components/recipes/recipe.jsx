@@ -1,5 +1,8 @@
 var React = require('react');
 
+// FLUX
+var SessionStore = require('../../stores/sessionStore');
+
 // COMPONENTS
 var MoreInfoButton = require('./moreInfoButton');
 var DeleteRecipeButton = require('./deleteRecipeButton');
@@ -16,7 +19,7 @@ var Recipe = React.createClass({
   },
 
   displayUser: function() {
-    if (this.props.displayUser) {
+    if (!SessionStore.loggedIn() || this.props.displayUser) {
       return (
         <h5>Saved by {this.props.recipe.user_username}</h5>
       )

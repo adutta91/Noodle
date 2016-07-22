@@ -15,11 +15,12 @@ module.exports = {
       data: user,
       success: function(user) {
         SessionActions.loginUser(user);
-        RecipeActions.receiveRecipes(user.id);
+        UserActions.receiveUser(user);
+        RecipeUtil.fetchUserRecipes(user.id);
         LikedRecipeUtil.fetchLikedRecipes(user.id);
       },
       error: function(error) {
-        alert('session start error')
+        alert('session start error');
       }
     })
   },

@@ -10,6 +10,10 @@ UserStore.user = function() {
   return _user;
 };
 
+UserStore.userSearched = function() {
+  return _userSearched;
+};
+
 UserStore.__onDispatch = function(payload) {
   switch(payload.actionType) {
     case 'RECEIVE_USER':
@@ -26,18 +30,19 @@ UserStore.__onDispatch = function(payload) {
 var resetUser = function(user) {
   _user = user;
   _userSearched = true;
-  localStorage['noodleSearch'] = JSON.stringify(user);
+  localStorage['noodleUserSearch'] = JSON.stringify(user);
 };
 
 var clearUser = function() {
   _user = {};
   _userSearched = false;
-  localStorage.removeItem('noodleSearch');
+  localStorage.removeItem('noodleUserSearch');
 }
 
 var checkLocalStorage = function() {
-  if (localStorage['noodleSearch']) {
-    _user = JSON.parse(localStorage['noodleSearch']);
+  if (localStorage['noodleUserSearch']) {
+    _user = JSON.parse(localStorage['noodleUserSearch']);
+    _userSearched = true;
   }
 };
 

@@ -64,19 +64,7 @@ var App = React.createClass({
       return (
         <h3>Welcome, {this.state.user.username}!</h3>
       );
-    } else if (this.state.recipes.length > 0){
-      return (
-        <h3>{this.state.user.username}'s recipes</h3>
-      )
-    }
-  },
-
-  getUserId: function() {
-    if (this.state.user) {
-      return this.state.user.id
-    } else {
-      return -1
-    }
+    } 
   },
 
   displayRecipeIndices: function() {

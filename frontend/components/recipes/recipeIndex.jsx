@@ -48,12 +48,25 @@ var RecipeIndex = React.createClass({
     }
   },
 
+  displayTitle: function() {
+    var firstRecipe = this.state.recipes[0]
+    if (SessionStore.loggedIn() && firstRecipe.user_id === SessionStore.user().id) {
+      return (
+        <h4>Your saved recipes</h4>
+      )
+    } else {
+      return (
+        <h4>{firstRecipe.user_username}'s saved recipes</h4>
+      )
+    }
+  },
+
   render: function() {
     return (
       <div className="flexColumn">
-        <h4>Saved Recipes</h4>
+      { this.displayTitle() }
         <div className="recipeList flexRow">
-          {this.displayRecipes()}
+          { this.displayRecipes() }
         </div>
       </div>
     )

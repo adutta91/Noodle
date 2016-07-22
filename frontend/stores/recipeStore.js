@@ -33,6 +33,11 @@ RecipeStore.findById = function(id) {
   return target;
 };
 
+var clearRecipes = function() {
+  _recipes = [];
+  localStorage.removeItem('noodleRecipes');
+};
+
 var resetRecipes = function(recipes) {
   _recipes = recipes;
   localStorage['noodleRecipes'] = JSON.stringify(recipes);
