@@ -21174,7 +21174,7 @@
 	  },
 	
 	  displayRecipeIndices: function () {
-	    if (SessionStore.user().id === UserStore.user().id) {
+	    if (UserStore.user().id) {
 	      return React.createElement(
 	        'div',
 	        null,
@@ -35001,7 +35001,7 @@
 	  displayRecipes: function () {
 	    if (this.state.recipes.length > 0) {
 	      return this.state.recipes.map(function (recipe) {
-	        return React.createElement(Recipe, { key: recipe.id, recipe: recipe });
+	        return React.createElement(Recipe, { displayUser: false, key: recipe.id, recipe: recipe });
 	      });
 	    } else {
 	      return React.createElement(
@@ -35095,13 +35095,25 @@
 	    );
 	  },
 	
+	  displayUser: function () {
+	    if (this.props.displayUser) {
+	      return React.createElement(
+	        'h5',
+	        null,
+	        'Saved by ',
+	        this.props.recipe.user_username
+	      );
+	    }
+	  },
+	
 	  render: function () {
 	    var recipeId = this.props.recipe.id;
 	    return React.createElement(
 	      'div',
 	      { className: 'recipe flexColumn' },
 	      this.displayRecipe(),
-	      React.createElement(MoreInfoButton, { recipeId: recipeId })
+	      React.createElement(MoreInfoButton, { recipeId: recipeId }),
+	      this.displayUser()
 	    );
 	  }
 	});
@@ -35481,7 +35493,7 @@
 	
 	  displayRecipes: function () {
 	    return this.state.recipes.map(function (recipe) {
-	      return React.createElement(Recipe, { key: recipe.id, recipe: recipe });
+	      return React.createElement(Recipe, { displayUser: true, key: recipe.id, recipe: recipe });
 	    });
 	  },
 	

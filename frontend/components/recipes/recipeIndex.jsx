@@ -32,7 +32,7 @@ var RecipeIndex = React.createClass({
     if (this.state.recipes.length > 0) {
       return this.state.recipes.map(function(recipe) {
         return (
-          <Recipe key={recipe.id} recipe={recipe} />
+          <Recipe displayUser={false} key={recipe.id} recipe={recipe} />
         )
       });
     } else {

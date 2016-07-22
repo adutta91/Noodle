@@ -20,6 +20,7 @@ recipe = Recipe.new
 recipe.title = 'fondue'
 recipe.url = 'http://www.google.com'
 recipe.user_id = 1
+recipe.user_username = 'adutta'
 recipe.description = 'simple fondue that tastes awesome'
 recipe.save!
 
@@ -27,6 +28,7 @@ recipe = Recipe.new
 recipe.title = 'salad'
 recipe.url = 'http://www.yahoo.com'
 recipe.user_id = 1
+recipe.user_username = 'adutta'
 recipe.description = "easy salad that's really healthy"
 recipe.save!
 
@@ -34,6 +36,7 @@ recipe = Recipe.new
 recipe.title = 'soup'
 recipe.url = 'http://www.facebook.com'
 recipe.user_id = 1
+recipe.user_username = 'adutta'
 recipe.description = "grandma's soup - with beets and butternut squash"
 recipe.save!
 
@@ -42,6 +45,7 @@ recipe = Recipe.new
 recipe.title = 'bonbons'
 recipe.url = 'http://www.google.com'
 recipe.user_id = 2
+recipe.user_username = 'ecombs'
 recipe.description = 'simple bonbon that tastes awesome'
 recipe.save!
 
@@ -49,6 +53,7 @@ recipe = Recipe.new
 recipe.title = 'pizza'
 recipe.url = 'http://www.yahoo.com'
 recipe.user_id = 2
+recipe.user_username = 'ecombs'
 recipe.description = "easy pizza that's really healthy"
 recipe.save!
 
@@ -56,6 +61,7 @@ recipe = Recipe.new
 recipe.title = 'fudge'
 recipe.url = 'http://www.facebook.com'
 recipe.user_id = 2
+recipe.user_username = 'ecombs'
 recipe.description = "grandpa's fudge - best thing ever"
 recipe.save!
 

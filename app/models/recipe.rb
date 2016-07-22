@@ -13,10 +13,10 @@
 
 class Recipe < ActiveRecord::Base
 
-  validates :title, :url, :user_id, presence: true
+  validates :title, :url, :user_id, :user_username, presence: true
 
   # associations
   belongs_to :user
   has_many :recipe_likes
-  
+
 end

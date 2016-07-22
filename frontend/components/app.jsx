@@ -71,7 +71,7 @@ var App = React.createClass({
   },
 
   displayRecipeIndices: function() {
-    if (SessionStore.user().id === UserStore.user().id) {
+    if (UserStore.user().id) {
       return (
         <div>
           <h4>Saved Recipes</h4>
