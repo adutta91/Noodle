@@ -17,52 +17,52 @@ user.save!
 
 
 recipe = Recipe.new
-recipe.title = 'fondue'
-recipe.url = 'http://www.google.com'
+recipe.title = 'bbq pork'
+recipe.url = 'http://www.epicurious.com/recipes/food/views/brown-sugar-bbq-pork-butt-56389621'
 recipe.user_id = 1
 recipe.user_username = 'adutta'
-recipe.description = 'simple fondue that tastes awesome'
+recipe.description = 'brown sugar bbq butt'
 recipe.save!
 
 recipe = Recipe.new
-recipe.title = 'salad'
-recipe.url = 'http://www.yahoo.com'
+recipe.title = 'poblano tacos'
+recipe.url = 'http://www.epicurious.com/recipes/food/views/herby-ricotta-poblano-tacos'
 recipe.user_id = 1
 recipe.user_username = 'adutta'
-recipe.description = "easy salad that's really healthy"
+recipe.description = "herby ricotta goodness"
 recipe.save!
 
 recipe = Recipe.new
-recipe.title = 'soup'
-recipe.url = 'http://www.facebook.com'
+recipe.title = 'chickpea feta salad'
+recipe.url = 'http://www.epicurious.com/recipes/food/views/-chickpea-barley-and-feta-salad-51239040'
 recipe.user_id = 1
 recipe.user_username = 'adutta'
-recipe.description = "grandma's soup - with beets and butternut squash"
+recipe.description = "mmmmm salad"
 recipe.save!
 
 
 recipe = Recipe.new
-recipe.title = 'bonbons'
-recipe.url = 'http://www.google.com'
+recipe.title = 'enchiladas'
+recipe.url = 'http://www.epicurious.com/recipes/food/views/skillet-chicken-and-zucchini-enchiladas-with-tomatillo-sauce'
 recipe.user_id = 2
 recipe.user_username = 'ecombs'
-recipe.description = 'simple bonbon that tastes awesome'
+recipe.description = 'chicken and succhini with tomatillo sauce'
 recipe.save!
 
 recipe = Recipe.new
-recipe.title = 'pizza'
-recipe.url = 'http://www.yahoo.com'
+recipe.title = 'cheesecake'
+recipe.url = 'http://www.epicurious.com/recipes/food/views/three-ingredient-japanese-cheesecake-56389916'
 recipe.user_id = 2
 recipe.user_username = 'ecombs'
-recipe.description = "easy pizza that's really healthy"
+recipe.description = "three ingredient japanese cheesecake"
 recipe.save!
 
 recipe = Recipe.new
-recipe.title = 'fudge'
-recipe.url = 'http://www.facebook.com'
+recipe.title = 'charred caprese`'
+recipe.url = 'http://www.epicurious.com/recipes/food/views/charred-caprese-sandwich'
 recipe.user_id = 2
 recipe.user_username = 'ecombs'
-recipe.description = "grandpa's fudge - best thing ever"
+recipe.description = "the title says it all, but in a sandwich"
 recipe.save!
 
 

@@ -49,6 +49,8 @@
 	
 	var App = __webpack_require__(172);
 	
+	document.domain = document.domain;
+	
 	document.addEventListener("DOMContentLoaded", function () {
 	  var root = document.getElementById("root");
 	  ReactDOM.render(React.createElement(App, null), root);
@@ -35158,6 +35160,7 @@
 	// COMPONENTS
 	var MoreInfoButton = __webpack_require__(286);
 	var DeleteRecipeButton = __webpack_require__(288);
+	var Frame = __webpack_require__(295);
 	
 	var Recipe = React.createClass({
 	  displayName: 'Recipe',
@@ -35183,12 +35186,17 @@
 	    }
 	  },
 	
+	  displayThumbnail: function () {
+	    return React.createElement(Frame, { url: this.props.recipe.url });
+	  },
+	
 	  render: function () {
 	    var recipeId = this.props.recipe.id;
 	    return React.createElement(
 	      'div',
 	      { className: 'recipe flexColumn' },
 	      this.displayRecipe(),
+	      this.displayThumbnail(),
 	      React.createElement(MoreInfoButton, { recipeId: recipeId }),
 	      this.displayUser()
 	    );
@@ -35689,6 +35697,31 @@
 	    });
 	  }
 	};
+
+/***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Frame = React.createClass({
+	  displayName: "Frame",
+	
+	
+	  componentDidMount: function () {
+	    document.domain = document.domain;
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "thumbWrapper", onClick: this.preventAction },
+	      React.createElement("iframe", { className: "thumbnail", src: this.props.url })
+	    );
+	  }
+	});
+	
+	module.exports = Frame;
 
 /***/ }
 /******/ ]);
