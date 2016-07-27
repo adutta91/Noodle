@@ -32,7 +32,8 @@ var LikedRecipeIndex = React.createClass({
 
   displayRecipes: function() {
     return this.state.recipes.map(function(recipe) {
-      return (<Recipe displayUser={true} key={recipe.id} recipe={recipe}/>)
+      var displayLike = recipe.user_id === SessionStore.user().id ? false : true;
+      return (<Recipe displayLike={displayLike} displayUser={true} key={recipe.id} recipe={recipe}/>);
     });
   },
 

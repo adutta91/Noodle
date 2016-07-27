@@ -20,9 +20,6 @@ var UserSearch = React.createClass({
   keyPress: function(event) {
     if (event.key === "Enter") {
       UserUtil.fetchUserInfo(this.state.searchValue);
-      if (SessionStore.user() && this.state.searchValue !== SessionStore.user().username) {
-        LikedRecipeUtil.resetLikedRecipes();
-      }
       this.setState({ searchValue: "" });
     }
   },

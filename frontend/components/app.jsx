@@ -28,6 +28,7 @@ var App = React.createClass({
   },
 
   componentDidMount: function() {
+    window.reactKeys = 0;
     this.sessionListener = SessionStore.addListener(this.updateSession);
     this.userListener = UserStore.addListener(this.updateUser);
     this.recipeListener = RecipeStore.addListener(this.updateRecipes);
@@ -64,7 +65,7 @@ var App = React.createClass({
       return (
         <h3>Welcome, {this.state.user.username}!</h3>
       );
-    } 
+    }
   },
 
   displayRecipeIndices: function() {

@@ -6,6 +6,7 @@ var SessionStore = require('../../stores/sessionStore');
 // COMPONENTS
 var MoreInfoButton = require('./moreInfoButton');
 var DeleteRecipeButton = require('./deleteRecipeButton');
+var LikeRecipeButton = require('./likeRecipeButton');
 var Frame = require('../reactDOMComponents/frame');
 
 var Recipe = React.createClass({
@@ -29,14 +30,24 @@ var Recipe = React.createClass({
 
   displayThumbnail: function() {
     return (
-      <Frame url={this.props.recipe.url}/>
+      // <Frame url={this.props.recipe.url}/>
+      <div/>
     )
+  },
+
+  displayLike: function() {
+    if (!SessionStore.loggedIn() || this.props.displayLike) {
+      return (
+        <LikeRecipeButton recipe={this.props.recipe}/>
+      )
+    }
   },
 
   render: function() {
     var recipeId = this.props.recipe.id;
     return (
       <div className="recipe flexColumn">
+        { this.displayLike() }
         { this.displayRecipe() }
         { this.displayThumbnail() }
         <MoreInfoButton recipeId={recipeId}/>

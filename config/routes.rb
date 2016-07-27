@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     patch '/recipes/:id', to: 'recipes#destroy'
 
     resources :recipe_likes, only: [:create]
-    patch '/recipe_likes/:id', to: 'recipe_likes#destroy'
+    patch '/recipe_likes', to: 'recipe_likes#destroy'
 
   end
 

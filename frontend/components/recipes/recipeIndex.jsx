@@ -31,8 +31,9 @@ var RecipeIndex = React.createClass({
   displayRecipes: function() {
     if (this.state.recipes.length > 0) {
       return this.state.recipes.map(function(recipe) {
+        var displayLike = recipe.user_id === SessionStore.user().id ? false : true;
         return (
-          <Recipe displayUser={false} key={recipe.id} recipe={recipe} />
+          <Recipe displayLike={displayLike} displayUser={false} key={recipe.id} recipe={recipe} />
         )
       });
     } else {
@@ -49,15 +50,17 @@ var RecipeIndex = React.createClass({
   },
 
   displayTitle: function() {
-    var firstRecipe = this.state.recipes[0]
-    if (SessionStore.loggedIn() && firstRecipe.user_id === SessionStore.user().id) {
-      return (
-        <h4>Your saved recipes</h4>
-      )
-    } else {
-      return (
-        <h4>{firstRecipe.user_username}'s saved recipes</h4>
-      )
+    var firstRecipe = this.state.recipes[0];
+    if (firstRecipe) {
+      if (SessionStore.loggedIn() && firstRecipe.user_id === SessionStore.user().id) {
+        return (
+          <h4>Your saved recipes</h4>
+        )
+      } else {
+        return (
+          <h4>{firstRecipe.user_username}'s saved recipes</h4>
+        )
+      }
     }
   },
 

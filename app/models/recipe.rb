@@ -19,4 +19,8 @@ class Recipe < ActiveRecord::Base
   belongs_to :user
   has_many :recipe_likes
 
+  has_many :liking_users,
+    through: :recipe_likes,
+    source: :user
+
 end

@@ -11,6 +11,13 @@ module.exports = {
   clearLikedRecipes: function() {
     Dispatcher.dispatch({
       actionType: 'CLEAR_LIKED_RECIPES'
-    })
+    });
+  },
+
+  addLikedRecipe: function(recipe) {
+    Dispatcher.dispatch({
+      actionType: 'ADD_LIKED_RECIPE',
+      recipe: recipe
+    });
   }
 }

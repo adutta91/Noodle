@@ -46,7 +46,7 @@ recipe.title = 'enchiladas'
 recipe.url = 'http://www.epicurious.com/recipes/food/views/skillet-chicken-and-zucchini-enchiladas-with-tomatillo-sauce'
 recipe.user_id = 2
 recipe.user_username = 'ecombs'
-recipe.description = 'chicken and succhini with tomatillo sauce'
+recipe.description = 'chicken and zucchini with tomatillo sauce'
 recipe.save!
 
 recipe = Recipe.new
@@ -58,7 +58,7 @@ recipe.description = "three ingredient japanese cheesecake"
 recipe.save!
 
 recipe = Recipe.new
-recipe.title = 'charred caprese`'
+recipe.title = 'charred caprese'
 recipe.url = 'http://www.epicurious.com/recipes/food/views/charred-caprese-sandwich'
 recipe.user_id = 2
 recipe.user_username = 'ecombs'
